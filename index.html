@@ -25,7 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* Target Cursor Styles */
+        /* ========== TARGET CURSOR (desktop only) ========== */
         .target-cursor-wrapper {
             position: fixed;
             top: 0;
@@ -61,30 +61,20 @@
             will-change: transform;
         }
 
-        .corner-tl {
-            transform: translate(-150%, -150%);
-            border-right: none;
-            border-bottom: none;
+        .corner-tl { transform: translate(-150%, -150%); border-right: none; border-bottom: none; }
+        .corner-tr { transform: translate(50%, -150%); border-left: none; border-bottom: none; }
+        .corner-br { transform: translate(50%, 50%); border-left: none; border-top: none; }
+        .corner-bl { transform: translate(-150%, 50%); border-right: none; border-top: none; }
+
+        /* Hide custom cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .target-cursor-wrapper { display: none !important; }
+            body { cursor: auto !important; }
+            * { cursor: auto; }
+            a, button, input, textarea, select, label, .cursor-target { cursor: pointer; }
         }
 
-        .corner-tr {
-            transform: translate(50%, -150%);
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner-br {
-            transform: translate(50%, 50%);
-            border-left: none;
-            border-top: none;
-        }
-
-        .corner-bl {
-            transform: translate(-150%, 50%);
-            border-right: none;
-            border-top: none;
-        }
-
+        /* ========== MATRIX CANVAS ========== */
         #matrix-canvas {
             position: fixed;
             top: 0;
@@ -95,6 +85,7 @@
             opacity: 0.2;
         }
 
+        /* ========== HUD CORNERS ========== */
         .hud {
             position: fixed;
             top: 0;
@@ -112,34 +103,12 @@
             border: 2px solid #f4d03f;
         }
 
-        .hud-corner.top-left {
-            top: 20px;
-            left: 20px;
-            border-right: none;
-            border-bottom: none;
-        }
+        .hud-corner.top-left    { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .hud-corner.top-right   { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .hud-corner.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .hud-corner.bottom-right{ bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
-        .hud-corner.top-right {
-            top: 20px;
-            right: 20px;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .hud-corner.bottom-left {
-            bottom: 20px;
-            left: 20px;
-            border-right: none;
-            border-top: none;
-        }
-
-        .hud-corner.bottom-right {
-            bottom: 20px;
-            right: 20px;
-            border-left: none;
-            border-top: none;
-        }
-
+        /* ========== DESKTOP SIDE NAV ========== */
         .nav-container {
             position: fixed;
             top: 50%;
@@ -174,9 +143,7 @@
             transition: width 0.3s ease;
         }
 
-        .nav-item:hover::after {
-            width: 100%;
-        }
+        .nav-item:hover::after { width: 100%; }
 
         .nav-item:hover {
             color: #f4d03f;
@@ -202,6 +169,98 @@
             box-shadow: 0 0 15px #e8f4f8, 0 0 25px #f4d03f;
         }
 
+        /* ========== MOBILE TOP NAV ========== */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 200;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(244, 208, 63, 0.3);
+            padding: 14px 18px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-nav-logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #f4d03f;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .mobile-hamburger {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .mobile-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #f4d03f;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .mobile-hamburger.active span:nth-child(2) { opacity: 0; }
+        .mobile-hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Mobile slide-down menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 62px;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(244, 208, 63, 0.3);
+            z-index: 199;
+            flex-direction: column;
+            padding: 10px 0;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            color: #e8f4f8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(244, 208, 63, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:last-child { border-bottom: none; }
+
+        .mobile-menu a:active,
+        .mobile-menu a:hover {
+            background: rgba(244, 208, 63, 0.08);
+            color: #f4d03f;
+            padding-left: 32px;
+        }
+
+        /* ========== HERO ========== */
         .hero {
             height: 100vh;
             position: relative;
@@ -215,6 +274,7 @@
             text-align: center;
             z-index: 2;
             position: relative;
+            padding: 0 20px;
         }
 
         .glitch {
@@ -230,23 +290,12 @@
         .glitch::after {
             content: attr(data-text);
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
         }
 
-        .glitch::before {
-            animation: glitch-1 0.5s infinite;
-            color: #f4d03f;
-            z-index: -1;
-        }
-
-        .glitch::after {
-            animation: glitch-2 0.5s infinite;
-            color: #e8f4f8;
-            z-index: -2;
-        }
+        .glitch::before { animation: glitch-1 0.5s infinite; color: #f4d03f; z-index: -1; }
+        .glitch::after  { animation: glitch-2 0.5s infinite; color: #e8f4f8; z-index: -2; }
 
         @keyframes glitch {
             0%, 74%, 100% { transform: translate(0); }
@@ -254,14 +303,12 @@
             76% { transform: translate(-10px, 10px); }
             77% { transform: translate(10px, 10px); }
         }
-
         @keyframes glitch-1 {
             0%, 74%, 100% { transform: translate(0); }
             75% { transform: translate(-10px, -10px); }
             76% { transform: translate(10px, -10px); }
             77% { transform: translate(-10px, 10px); }
         }
-
         @keyframes glitch-2 {
             0%, 74%, 100% { transform: translate(0); }
             75% { transform: translate(10px, 10px); }
@@ -291,8 +338,8 @@
         .terminal-line:nth-child(3) { animation-delay: 3s; }
 
         @keyframes typewriter {
-            0% { opacity: 0; width: 0; }
-            50% { opacity: 1; }
+            0%   { opacity: 0; width: 0; }
+            50%  { opacity: 1; }
             100% { opacity: 1; width: 100%; }
         }
 
@@ -316,24 +363,17 @@
         .cta-button::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(90deg, #f4d03f, #e8f4f8);
             transition: left 0.3s ease;
             z-index: -1;
         }
 
-        .cta-button:hover::before {
-            left: 0;
-        }
+        .cta-button:hover::before { left: 0; }
+        .cta-button:hover { color: #0a1628; box-shadow: 0 0 30px #f4d03f; }
 
-        .cta-button:hover {
-            color: #0a1628;
-            box-shadow: 0 0 30px #f4d03f;
-        }
-
+        /* ========== SECTIONS ========== */
         .section {
             min-height: 100vh;
             padding: 100px 50px;
@@ -370,6 +410,7 @@
             background: linear-gradient(90deg, transparent, #e8f4f8, transparent);
         }
 
+        /* ========== ABOUT ========== */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -389,7 +430,7 @@
             border-left: 2px solid #f4d03f;
         }
 
-        /* Profile Card Styles - Cyberpunk Theme */
+        /* ========== PROFILE CARD ========== */
         .pc-card-wrapper {
             perspective: 500px;
             position: relative;
@@ -411,9 +452,7 @@
             transition: opacity 0.5s ease;
         }
 
-        .pc-card-wrapper.pc-active::before {
-            opacity: 1;
-        }
+        .pc-card-wrapper.pc-active::before { opacity: 1; }
 
         .pc-card {
             height: 500px;
@@ -425,12 +464,9 @@
             overflow: hidden;
             transition: transform 0.6s ease;
             transform: rotateX(0deg) rotateY(0deg);
-            
         }
 
-        .pc-card.pc-active {
-            transform: rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
-        }
+        .pc-card.pc-active { transform: rotateX(var(--rotate-y)) rotateY(var(--rotate-x)); }
 
         .pc-inside {
             position: absolute;
@@ -441,63 +477,43 @@
         }
 
         .pc-shine {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(244, 208, 63, 0.2), transparent 60%);
             mix-blend-mode: color-dodge;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
-        .pc-card.pc-active .pc-shine {
-            opacity: 1;
-        }
+        .pc-card.pc-active .pc-shine { opacity: 1; }
 
         .pc-glare {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(232, 244, 248, 0.3) 0%, transparent 50%);
             mix-blend-mode: overlay;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
-        .pc-card.pc-active .pc-glare {
-            opacity: 1;
-        }
+        .pc-card.pc-active .pc-glare { opacity: 1; }
 
         .pc-content {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             display: flex;
             flex-direction: column;
         }
 
-        .pc-avatar-content {
-            position: relative;
-            flex: 1;
-        }
+        .pc-avatar-content { position: relative; flex: 1; }
 
-        .pc-avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
-        }
+        .pc-avatar { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
 
         .pc-avatar-content::before {
             content: '';
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: linear-gradient(to bottom, transparent 50%, rgba(10, 22, 40, 0.9) 90%);
             z-index: 1;
         }
 
         .pc-user-info {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
+            bottom: 20px; left: 20px; right: 20px;
             z-index: 2;
             display: flex;
             align-items: center;
@@ -509,44 +525,19 @@
             padding: 12px 14px;
         }
 
-        .pc-user-details {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .pc-user-details { display: flex; align-items: center; gap: 12px; }
 
         .pc-mini-avatar {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border-radius: 50%;
             overflow: hidden;
             border: 2px solid #f4d03f;
         }
+        .pc-mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .pc-mini-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .pc-user-text {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .pc-handle {
-            font-size: 14px;
-            font-weight: 700;
-            color: #f4d03f;
-            font-family: 'Orbitron', monospace;
-        }
-
-        .pc-status {
-            font-size: 12px;
-            color: #e8f4f8;
-            font-family: 'Orbitron', monospace;
-        }
+        .pc-user-text { display: flex; flex-direction: column; gap: 4px; }
+        .pc-handle { font-size: 14px; font-weight: 700; color: #f4d03f; font-family: 'Orbitron', monospace; }
+        .pc-status { font-size: 12px; color: #e8f4f8; font-family: 'Orbitron', monospace; }
 
         .pc-contact-btn {
             background: transparent;
@@ -563,41 +554,24 @@
             letter-spacing: 1px;
             pointer-events: auto;
         }
-
-        .pc-contact-btn:hover {
-            background: #f4d03f;
-            color: #0a1628;
-            box-shadow: 0 0 20px #f4d03f;
-        }
+        .pc-contact-btn:hover { background: #f4d03f; color: #0a1628; box-shadow: 0 0 20px #f4d03f; }
 
         .pc-details {
             position: absolute;
-            top: 30px;
-            left: 0;
-            right: 0;
+            top: 30px; left: 0; right: 0;
             text-align: center;
             z-index: 2;
         }
-
         .pc-details h3 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: whitesmoke;
-            margin: 0 0 10px 0;
+            font-size: 2.5rem; font-weight: 900;
+            color: whitesmoke; margin: 0 0 10px 0;
             text-shadow: 0 0 20px whitesmoke;
             font-family: 'Orbitron', monospace;
         }
+        .pc-details p { font-size: 1.2rem; color: #e8f4f8; margin: 0; font-family: 'Orbitron', monospace; }
 
-        .pc-details p {
-            font-size: 1.2rem;
-            color: #e8f4f8;
-            margin: 0;
-            font-family: 'Orbitron', monospace;
-        }
-
-        .projects-container {
-            perspective: 1000px;
-        }
+        /* ========== PROJECTS ========== */
+        .projects-container { perspective: 1000px; }
 
         .project-grid {
             display: grid;
@@ -621,17 +595,12 @@
         .project-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.1), transparent);
             transition: left 0.5s ease;
         }
-
-        .project-card:hover::before {
-            left: 100%;
-        }
+        .project-card:hover::before { left: 100%; }
 
         .project-card:hover {
             transform: rotateX(5deg) rotateY(5deg) translateZ(20px);
@@ -649,9 +618,7 @@
             letter-spacing: 2px;
         }
 
-        .project-content {
-            padding: 30px;
-        }
+        .project-content { padding: 30px; }
 
         .project-visual {
             width: 100%;
@@ -668,40 +635,22 @@
             overflow: hidden;
         }
 
-        .project-visual iframe {
-            width: 100%;
-            height: 200%;
-            border: none;
-        }
+        .project-visual iframe { width: 100%; height: 200%; border: none; }
 
         .project-visual::after {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(45deg, transparent 48%, #f4d03f 49%, #f4d03f 51%, transparent 52%);
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
+        .project-card:hover .project-visual::after { opacity: 0.1; }
 
-        .project-card:hover .project-visual::after {
-            opacity: 0.1;
-        }
+        .project-description { color: #e8f4f8; line-height: 1.6; margin-bottom: 20px; }
 
-        .project-description {
-            color: #e8f4f8;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .project-tech { display: flex; flex-wrap: wrap; gap: 10px; }
 
         .tech-tag {
             background: transparent;
@@ -714,6 +663,7 @@
             letter-spacing: 1px;
         }
 
+        /* ========== CONTACT ========== */
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -721,10 +671,7 @@
             align-items: center;
         }
 
-        .contact-info {
-            font-size: 1.2rem;
-            line-height: 2;
-        }
+        .contact-info { font-size: 1.2rem; line-height: 2; }
 
         .contact-item {
             display: flex;
@@ -735,19 +682,13 @@
             background: linear-gradient(45deg, rgba(244, 208, 63, 0.05), rgba(232, 244, 248, 0.05));
             transition: all 0.3s ease;
         }
-
         .contact-item:hover {
             border-color: #f4d03f;
             background: linear-gradient(45deg, rgba(244, 208, 63, 0.1), rgba(232, 244, 248, 0.1));
             transform: translateX(10px);
         }
 
-        .contact-icon {
-            font-size: 1.5rem;
-            color: #f4d03f;
-            margin-right: 20px;
-            width: 40px;
-        }
+        .contact-icon { font-size: 1.5rem; color: #f4d03f; margin-right: 20px; width: 40px; }
 
         .terminal-form {
             background: #0a1628;
@@ -756,17 +697,9 @@
             font-family: 'Courier New', monospace;
         }
 
-        .terminal-header {
-            color: #f4d03f;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 700;
-        }
+        .terminal-header { color: #f4d03f; font-size: 1.2rem; margin-bottom: 20px; text-align: center; font-weight: 700; }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-group label {
             display: block;
@@ -788,7 +721,6 @@
             font-size: 1rem;
             transition: all 0.3s ease;
         }
-
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
@@ -812,29 +744,18 @@
             position: relative;
             overflow: hidden;
         }
-
         .submit-btn::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(90deg, #f4d03f, #e8f4f8);
             transition: left 0.3s ease;
             z-index: -1;
         }
+        .submit-btn:hover::before { left: 0; }
+        .submit-btn:hover { color: #0a1628; box-shadow: 0 0 30px #f4d03f; }
 
-        .submit-btn:hover::before {
-            left: 0;
-        }
-
-        .submit-btn:hover {
-            color: #0a1628;
-            box-shadow: 0 0 30px #f4d03f;
-        }
-
-        /* Skills Section Styles */
+        /* ========== SKILLS ========== */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
@@ -850,77 +771,37 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-
         .skill-category::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.05), transparent);
             transition: left 0.5s ease;
         }
-
-        .skill-category:hover::before {
-            left: 100%;
-        }
-
-        .skill-category:hover {
-            border-color: #f4d03f;
-            box-shadow: 0 10px 30px rgba(244, 208, 63, 0.2);
-        }
+        .skill-category:hover::before { left: 100%; }
+        .skill-category:hover { border-color: #f4d03f; box-shadow: 0 10px 30px rgba(244, 208, 63, 0.2); }
 
         .skill-category-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #f4d03f;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 1.8rem; font-weight: 900;
+            color: #f4d03f; margin-bottom: 30px;
+            text-transform: uppercase; letter-spacing: 2px;
             text-shadow: 0 0 10px #f4d03f;
         }
 
-        .skill-bars {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .skill-bars { display: flex; flex-direction: column; gap: 20px; }
 
-        .skill-item {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .skill-item { display: flex; flex-direction: column; gap: 8px; }
 
-        .skill-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .skill-header { display: flex; justify-content: space-between; align-items: center; }
 
-        .skill-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #e8f4f8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .skill-percent {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #f4d03f;
-            font-family: 'Courier New', monospace;
-        }
+        .skill-name { font-size: 1rem; font-weight: 700; color: #e8f4f8; text-transform: uppercase; letter-spacing: 1px; }
+        .skill-percent { font-size: 0.9rem; font-weight: 700; color: #f4d03f; font-family: 'Courier New', monospace; }
 
         .skill-bar-container {
-            width: 100%;
-            height: 12px;
+            width: 100%; height: 12px;
             background: #0a1628;
             border: 1px solid #1e3a5f;
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         .skill-bar {
@@ -930,57 +811,40 @@
             transition: width 1s ease;
             box-shadow: 0 0 10px #f4d03f;
         }
-
         .skill-bar::after {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shimmer 2s infinite;
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
+            0%   { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
 
-        @media (max-width: 768px) {
-            .glitch { font-size: 4rem; }
-            .section { padding: 50px 20px; }
-            .about-grid, .contact-container { grid-template-columns: 1fr; gap: 40px; }
-            .project-grid { grid-template-columns: 1fr; }
-            .skills-grid { grid-template-columns: 1fr; }
-            .nav-container { display: none; }
-        }
-
+        /* ========== SCANLINES ========== */
         .scanlines::before {
             content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(transparent 50%, rgba(244, 208, 63, 0.02) 50%);
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 1000;
         }
 
-        /* AI Chat Assistant Styles */
+        /* ========== AI CHAT ========== */
         .ai-chat-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 30px; right: 30px;
             z-index: 999;
             max-width: 420px;
         }
 
         .ai-chat-button {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, #f4d03f, #e8f4f8);
             border: 2px solid #f4d03f;
@@ -989,26 +853,19 @@
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(244, 208, 63, 0.4);
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             animation: pulse 2s infinite;
         }
-
-        .ai-chat-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(244, 208, 63, 0.6);
-        }
+        .ai-chat-button:hover { transform: scale(1.1); box-shadow: 0 6px 30px rgba(244, 208, 63, 0.6); }
 
         @keyframes pulse {
             0%, 100% { box-shadow: 0 4px 20px rgba(244, 208, 63, 0.4); }
-            50% { box-shadow: 0 4px 30px rgba(244, 208, 63, 0.8); }
+            50%      { box-shadow: 0 4px 30px rgba(244, 208, 63, 0.8); }
         }
 
         .ai-chat-window {
             position: fixed;
-            bottom: 100px;
-            right: 30px;
+            bottom: 100px; right: 30px;
             width: 420px;
             max-width: calc(100vw - 60px);
             height: 600px;
@@ -1019,287 +876,286 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-
-        .ai-chat-window.open {
-            display: flex;
-            animation: slideUp 0.3s ease;
-        }
+        .ai-chat-window.open { display: flex; animation: slideUp 0.3s ease; }
 
         @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            to   { transform: translateY(0); opacity: 1; }
         }
 
         .ai-chat-header {
             background: linear-gradient(45deg, #f4d03f, #e8f4f8);
             padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
         }
+        .ai-chat-header h4 { margin: 0; font-size: 1.2rem; font-weight: 900; color: #0a1628; text-transform: uppercase; letter-spacing: 1px; }
 
-        .ai-chat-header h4 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #0a1628;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ai-chat-close {
-            background: transparent;
-            border: none;
-            color: #0a1628;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .ai-chat-close:hover {
-            transform: rotate(90deg);
-        }
+        .ai-chat-close { background: transparent; border: none; color: #0a1628; font-size: 1.5rem; cursor: pointer; transition: transform 0.2s ease; }
+        .ai-chat-close:hover { transform: rotate(90deg); }
 
         .ai-chat-messages {
-            flex: 1;
-            padding: 20px;
+            flex: 1; padding: 20px;
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: flex; flex-direction: column; gap: 15px;
         }
+        .ai-chat-messages::-webkit-scrollbar { width: 6px; }
+        .ai-chat-messages::-webkit-scrollbar-track { background: #0a1628; }
+        .ai-chat-messages::-webkit-scrollbar-thumb { background: #f4d03f; border-radius: 3px; }
 
-        .ai-chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .ai-chat-messages::-webkit-scrollbar-track {
-            background: #0a1628;
-        }
-
-        .ai-chat-messages::-webkit-scrollbar-thumb {
-            background: #f4d03f;
-            border-radius: 3px;
-        }
-
-        .ai-message {
-            display: flex;
-            gap: 10px;
-            animation: fadeIn 0.3s ease;
-        }
-
+        .ai-message { display: flex; gap: 10px; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-
-        .ai-message.user {
-            flex-direction: row-reverse;
-        }
+        .ai-message.user { flex-direction: row-reverse; }
 
         .ai-message-avatar {
-            width: 35px;
-            height: 35px;
+            width: 35px; height: 35px;
             border-radius: 50%;
             background: linear-gradient(135deg, #f4d03f, #e8f4f8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; flex-shrink: 0;
         }
-
-        .ai-message.user .ai-message-avatar {
-            background: linear-gradient(135deg, #e8f4f8, #f4d03f);
-        }
+        .ai-message.user .ai-message-avatar { background: linear-gradient(135deg, #e8f4f8, #f4d03f); }
 
         .ai-message-content {
-            max-width: 70%;
-            padding: 12px 15px;
-            border-radius: 12px;
+            max-width: 70%; padding: 12px 15px; border-radius: 12px;
             background: rgba(244, 208, 63, 0.1);
             border: 1px solid rgba(244, 208, 63, 0.3);
-            color: #e8f4f8;
-            line-height: 1.5;
-            font-size: 0.95rem;
+            color: #e8f4f8; line-height: 1.5; font-size: 0.95rem;
         }
-
         .ai-message.user .ai-message-content {
             background: rgba(232, 244, 248, 0.1);
             border: 1px solid rgba(232, 244, 248, 0.3);
         }
 
         .ai-chat-input-container {
-            padding: 15px;
-            background: #0a1628;
+            padding: 15px; background: #0a1628;
             border-top: 1px solid #1e3a5f;
-            display: flex;
-            gap: 10px;
+            display: flex; gap: 10px;
         }
 
         .ai-chat-input {
-            flex: 1;
-            background: transparent;
+            flex: 1; background: transparent;
             border: 1px solid #1e3a5f;
-            color: #e8f4f8;
-            padding: 12px 15px;
-            border-radius: 25px;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.9rem;
+            color: #e8f4f8; padding: 12px 15px; border-radius: 25px;
+            font-family: 'Orbitron', monospace; font-size: 0.9rem;
             transition: all 0.3s ease;
         }
-
-        .ai-chat-input:focus {
-            outline: none;
-            border-color: #f4d03f;
-            box-shadow: 0 0 15px rgba(244, 208, 63, 0.3);
-        }
+        .ai-chat-input:focus { outline: none; border-color: #f4d03f; box-shadow: 0 0 15px rgba(244, 208, 63, 0.3); }
 
         .ai-chat-send {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            width: 45px; height: 45px; border-radius: 50%;
             background: linear-gradient(135deg, #f4d03f, #e8f4f8);
-            border: none;
-            color: #0a1628;
-            font-size: 1.2rem;
-            cursor: pointer;
+            border: none; color: #0a1628; font-size: 1.2rem; cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
+        .ai-chat-send:hover { transform: scale(1.1); box-shadow: 0 4px 15px rgba(244, 208, 63, 0.5); }
+        .ai-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .ai-chat-send:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(244, 208, 63, 0.5);
-        }
-
-        .ai-chat-send:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .ai-typing {
-            display: flex;
-            gap: 5px;
-            padding: 10px;
-        }
-
-        .ai-typing span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #f4d03f;
-            animation: typing 1.4s infinite;
-        }
-
-        .ai-typing span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .ai-typing span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
+        .ai-typing { display: flex; gap: 5px; padding: 10px; }
+        .ai-typing span { width: 8px; height: 8px; border-radius: 50%; background: #f4d03f; animation: typing 1.4s infinite; }
+        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing {
             0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+            30%           { transform: translateY(-10px); }
         }
 
+        /* ========================================================
+           RESPONSIVE BREAKPOINTS
+           ======================================================== */
+
+        /* --- Tablet: ≤ 1024px --- */
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; gap: 50px; }
+            .about-grid .pc-card-wrapper { max-width: 360px; margin: 0 auto; }
+
+            .project-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+
+            .skills-grid { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 30px; }
+
+            .contact-container { grid-template-columns: 1fr; gap: 50px; }
+
+            .section { padding: 80px 40px; }
+            .section-title { font-size: 3rem; }
+        }
+
+        /* --- Mobile: ≤ 768px --- */
         @media (max-width: 768px) {
-            .ai-chat-container {
-                bottom: 20px;
-                right: 20px;
-            }
-            
+            /* Show mobile nav, hide desktop nav */
+            .mobile-nav   { display: flex; }
+            .nav-container { display: none; }
+
+            /* HUD shrink */
+            .hud-corner { width: 30px; height: 30px; }
+            .hud-corner.top-left    { top: 10px; left: 10px; }
+            .hud-corner.top-right   { top: 10px; right: 10px; }
+            .hud-corner.bottom-left { bottom: 10px; left: 10px; }
+            .hud-corner.bottom-right{ bottom: 10px; right: 10px; }
+
+            /* Hero */
+            .hero { padding-top: 62px; }
+            .glitch { font-size: 3.4rem; }
+            .hero-subtitle { font-size: 0.95rem; letter-spacing: 2px; margin-bottom: 24px; }
+            .terminal-line { font-size: 0.85rem; }
+            .cta-button { padding: 13px 28px; font-size: 0.85rem; margin-top: 22px; }
+
+            /* Sections */
+            .section { padding: 60px 20px; min-height: auto; }
+            .section-title { font-size: 2rem; letter-spacing: 2px; margin-bottom: 36px; }
+
+            /* About */
+            .about-text { font-size: 0.95rem; }
+            .about-text p { padding-left: 14px; }
+            .about-grid .pc-card-wrapper { max-width: 300px; }
+            .pc-card { height: 380px; }
+            .pc-details h3 { font-size: 1.6rem; }
+            .pc-details p  { font-size: 0.85rem; }
+            .pc-user-info   { bottom: 12px; left: 12px; right: 12px; padding: 10px 10px; }
+            .pc-mini-avatar { width: 38px; height: 38px; }
+            .pc-handle      { font-size: 11px; }
+            .pc-status      { font-size: 10px; }
+            .pc-contact-btn { font-size: 10px; padding: 6px 10px; }
+
+            /* Projects */
+            .project-grid { grid-template-columns: 1fr; gap: 28px; margin-top: 40px; }
+            .project-card:hover { transform: none; }
+            .project-header { font-size: 1.1rem; padding: 14px 18px; }
+            .project-content { padding: 20px; }
+            .project-visual { height: 200px; font-size: 2.8rem; }
+            .project-description { font-size: 0.88rem; }
+            .tech-tag { font-size: 0.7rem; padding: 4px 9px; }
+
+            /* Skills */
+            .skills-grid { grid-template-columns: 1fr; gap: 24px; margin-top: 36px; }
+            .skill-category { padding: 22px; }
+            .skill-category-title { font-size: 1.2rem; margin-bottom: 20px; }
+            .skill-name { font-size: 0.85rem; }
+            .skill-percent { font-size: 0.8rem; }
+            .skill-bar-container { height: 9px; }
+
+            /* Contact */
+            .contact-container { gap: 36px; }
+            .contact-item  { padding: 12px; margin-bottom: 12px; }
+            .contact-icon  { font-size: 1.2rem; margin-right: 14px; width: 30px; }
+            .contact-info  { font-size: 0.9rem; }
+            .terminal-form { padding: 22px 18px; }
+            .terminal-header { font-size: 0.9rem; }
+            .form-group label { font-size: 0.8rem; }
+            .form-group input,
+            .form-group textarea { font-size: 0.9rem; padding: 10px; }
+            .submit-btn { font-size: 0.85rem; padding: 13px; letter-spacing: 1px; }
+
+            /* AI chat */
+            .ai-chat-container { bottom: 20px; right: 20px; }
+            .ai-chat-button    { width: 54px; height: 54px; font-size: 1.5rem; }
+            .ai-chat-button img { width: 32px; }
             .ai-chat-window {
-                bottom: 90px;
-                right: 20px;
-                width: calc(100vw - 40px);
-                height: 500px;
-                max-height: calc(100vh - 130px);
+                bottom: 86px; right: 10px; left: 10px;
+                width: calc(100vw - 20px);
+                height: 520px;
+                max-height: calc(100vh - 120px);
             }
+        }
+
+        /* --- Small phones: ≤ 400px --- */
+        @media (max-width: 400px) {
+            .glitch { font-size: 2.6rem; }
+            .hero-subtitle { font-size: 0.8rem; }
+            .section-title { font-size: 1.6rem; }
+            .pc-card { height: 320px; }
+            .pc-details h3 { font-size: 1.3rem; }
+            .project-visual { height: 160px; }
+            .ai-chat-window { height: 460px; }
         }
     </style>
 </head>
 <body class="scanlines">
     <div id="root"></div>
 
+    <!-- Mobile nav rendered via vanilla JS so it exists before React mounts -->
+    <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-logo">RAJVANSH</div>
+        <button class="mobile-hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home"    class="mobile-menu-link">INIT</a>
+        <a href="#about"   class="mobile-menu-link">PROFILE</a>
+        <a href="#projects" class="mobile-menu-link">PROJECTS</a>
+        <a href="#skills"  class="mobile-menu-link">SKILLS</a>
+        <a href="#contact" class="mobile-menu-link">CONNECT</a>
+    </div>
+
+    <script>
+        // Mobile hamburger toggle (vanilla, runs before React)
+        (function(){
+            var btn  = document.getElementById('hamburgerBtn');
+            var menu = document.getElementById('mobileMenu');
+            var links = menu.querySelectorAll('a');
+
+            btn.addEventListener('click', function(){
+                btn.classList.toggle('active');
+                menu.classList.toggle('open');
+            });
+
+            links.forEach(function(link){
+                link.addEventListener('click', function(){
+                    btn.classList.remove('active');
+                    menu.classList.remove('open');
+                });
+            });
+        })();
+    </script>
+
     <script type="text/babel">
         const { useEffect, useRef, useCallback, useMemo, useState } = React;
 
-        // Target Cursor Component
+        // ─── Detect touch device once ───
+        const isTouchDevice = () =>
+            navigator.maxTouchPoints > 0 || window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+        // ─── Target Cursor (rendered only on non-touch) ───
         const TargetCursor = ({ targetSelector = '.cursor-target, a, button, .project-card, input, textarea, .nav-item', spinDuration = 2, hideDefaultCursor = true }) => {
             const cursorRef = useRef(null);
             const cornersRef = useRef(null);
             const spinTl = useRef(null);
             const dotRef = useRef(null);
-            const constants = useMemo(
-                () => ({
-                    borderWidth: 3,
-                    cornerSize: 16,
-                    parallaxStrength: 0.00005
-                }),
-                []
-            );
+            const constants = useMemo(() => ({ borderWidth: 3, cornerSize: 16, parallaxStrength: 0.00005 }), []);
 
             const moveCursor = useCallback((x, y) => {
                 if (!cursorRef.current) return;
-                gsap.to(cursorRef.current, {
-                    x,
-                    y,
-                    duration: 0.1,
-                    ease: 'power3.out'
-                });
+                gsap.to(cursorRef.current, { x, y, duration: 0.1, ease: 'power3.out' });
             }, []);
 
             useEffect(() => {
                 if (!cursorRef.current) return;
-
                 const originalCursor = document.body.style.cursor;
-                if (hideDefaultCursor) {
-                    document.body.style.cursor = 'none';
-                }
+                if (hideDefaultCursor) document.body.style.cursor = 'none';
 
                 const cursor = cursorRef.current;
                 cornersRef.current = cursor.querySelectorAll('.target-cursor-corner');
 
-                let activeTarget = null;
-                let currentTargetMove = null;
-                let currentLeaveHandler = null;
-                let isAnimatingToTarget = false;
-                let resumeTimeout = null;
+                let activeTarget = null, currentTargetMove = null, currentLeaveHandler = null;
+                let isAnimatingToTarget = false, resumeTimeout = null;
 
                 const cleanupTarget = target => {
-                    if (currentTargetMove) {
-                        target.removeEventListener('mousemove', currentTargetMove);
-                    }
-                    if (currentLeaveHandler) {
-                        target.removeEventListener('mouseleave', currentLeaveHandler);
-                    }
-                    currentTargetMove = null;
-                    currentLeaveHandler = null;
+                    if (currentTargetMove)  target.removeEventListener('mousemove', currentTargetMove);
+                    if (currentLeaveHandler) target.removeEventListener('mouseleave', currentLeaveHandler);
+                    currentTargetMove = null; currentLeaveHandler = null;
                 };
 
-                gsap.set(cursor, {
-                    xPercent: -50,
-                    yPercent: -50,
-                    x: window.innerWidth / 2,
-                    y: window.innerHeight / 2
-                });
+                gsap.set(cursor, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
                 const createSpinTimeline = () => {
-                    if (spinTl.current) {
-                        spinTl.current.kill();
-                    }
-                    spinTl.current = gsap
-                        .timeline({ repeat: -1 })
-                        .to(cursor, { rotation: '+=360', duration: spinDuration, ease: 'none' });
+                    if (spinTl.current) spinTl.current.kill();
+                    spinTl.current = gsap.timeline({ repeat: -1 }).to(cursor, { rotation: '+=360', duration: spinDuration, ease: 'none' });
                 };
-
                 createSpinTimeline();
 
                 const moveHandler = e => moveCursor(e.clientX, e.clientY);
@@ -1307,22 +1163,12 @@
 
                 const scrollHandler = () => {
                     if (!activeTarget || !cursorRef.current) return;
-
                     const mouseX = gsap.getProperty(cursorRef.current, 'x');
                     const mouseY = gsap.getProperty(cursorRef.current, 'y');
-
-                    const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
-                    const isStillOverTarget =
-                        elementUnderMouse &&
-                        (elementUnderMouse === activeTarget || elementUnderMouse.closest(targetSelector) === activeTarget);
-
-                    if (!isStillOverTarget) {
-                        if (currentLeaveHandler) {
-                            currentLeaveHandler();
-                        }
-                    }
+                    const el = document.elementFromPoint(mouseX, mouseY);
+                    const stillOver = el && (el === activeTarget || el.closest(targetSelector) === activeTarget);
+                    if (!stillOver && currentLeaveHandler) currentLeaveHandler();
                 };
-
                 window.addEventListener('scroll', scrollHandler, { passive: true });
 
                 const mouseDownHandler = () => {
@@ -1330,191 +1176,97 @@
                     gsap.to(dotRef.current, { scale: 0.7, duration: 0.3 });
                     gsap.to(cursorRef.current, { scale: 0.9, duration: 0.2 });
                 };
-
                 const mouseUpHandler = () => {
                     if (!dotRef.current) return;
                     gsap.to(dotRef.current, { scale: 1, duration: 0.3 });
                     gsap.to(cursorRef.current, { scale: 1, duration: 0.2 });
                 };
-
                 window.addEventListener('mousedown', mouseDownHandler);
                 window.addEventListener('mouseup', mouseUpHandler);
 
                 const enterHandler = e => {
-                    const directTarget = e.target;
-
-                    const allTargets = [];
-                    let current = directTarget;
+                    let current = e.target, allTargets = [];
                     while (current && current !== document.body) {
-                        if (current.matches(targetSelector)) {
-                            allTargets.push(current);
-                        }
+                        if (current.matches && current.matches(targetSelector)) allTargets.push(current);
                         current = current.parentElement;
                     }
-
                     const target = allTargets[0] || null;
                     if (!target || !cursorRef.current || !cornersRef.current) return;
-
                     if (activeTarget === target) return;
-
-                    if (activeTarget) {
-                        cleanupTarget(activeTarget);
-                    }
-
-                    if (resumeTimeout) {
-                        clearTimeout(resumeTimeout);
-                        resumeTimeout = null;
-                    }
+                    if (activeTarget) cleanupTarget(activeTarget);
+                    if (resumeTimeout) { clearTimeout(resumeTimeout); resumeTimeout = null; }
 
                     activeTarget = target;
-                    const corners = Array.from(cornersRef.current);
-                    corners.forEach(corner => {
-                        gsap.killTweensOf(corner);
-                    });
-
+                    Array.from(cornersRef.current).forEach(c => gsap.killTweensOf(c));
                     gsap.killTweensOf(cursorRef.current, 'rotation');
                     spinTl.current?.pause();
-
                     gsap.set(cursorRef.current, { rotation: 0 });
 
                     const updateCorners = (mouseX, mouseY) => {
                         const rect = target.getBoundingClientRect();
                         const cursorRect = cursorRef.current.getBoundingClientRect();
-
-                        const cursorCenterX = cursorRect.left + cursorRect.width / 2;
-                        const cursorCenterY = cursorRect.top + cursorRect.height / 2;
-
-                        const [tlc, trc, brc, blc] = Array.from(cornersRef.current);
-
+                        const cx = cursorRect.left + cursorRect.width / 2;
+                        const cy = cursorRect.top + cursorRect.height / 2;
                         const { borderWidth, cornerSize, parallaxStrength } = constants;
 
-                        let tlOffset = {
-                            x: rect.left - cursorCenterX - borderWidth,
-                            y: rect.top - cursorCenterY - borderWidth
-                        };
-                        let trOffset = {
-                            x: rect.right - cursorCenterX + borderWidth - cornerSize,
-                            y: rect.top - cursorCenterY - borderWidth
-                        };
-                        let brOffset = {
-                            x: rect.right - cursorCenterX + borderWidth - cornerSize,
-                            y: rect.bottom - cursorCenterY + borderWidth - cornerSize
-                        };
-                        let blOffset = {
-                            x: rect.left - cursorCenterX - borderWidth,
-                            y: rect.bottom - cursorCenterY + borderWidth - cornerSize
-                        };
+                        let offsets = [
+                            { x: rect.left - cx - borderWidth,                        y: rect.top - cy - borderWidth },
+                            { x: rect.right - cx + borderWidth - cornerSize,          y: rect.top - cy - borderWidth },
+                            { x: rect.right - cx + borderWidth - cornerSize,          y: rect.bottom - cy + borderWidth - cornerSize },
+                            { x: rect.left - cx - borderWidth,                        y: rect.bottom - cy + borderWidth - cornerSize }
+                        ];
 
                         if (mouseX !== undefined && mouseY !== undefined) {
-                            const targetCenterX = rect.left + rect.width / 2;
-                            const targetCenterY = rect.top + rect.height / 2;
-                            const mouseOffsetX = (mouseX - targetCenterX) * parallaxStrength;
-                            const mouseOffsetY = (mouseY - targetCenterY) * parallaxStrength;
-
-                            tlOffset.x += mouseOffsetX;
-                            tlOffset.y += mouseOffsetY;
-                            trOffset.x += mouseOffsetX;
-                            trOffset.y += mouseOffsetY;
-                            brOffset.x += mouseOffsetX;
-                            brOffset.y += mouseOffsetY;
-                            blOffset.x += mouseOffsetX;
-                            blOffset.y += mouseOffsetY;
+                            const tcx = rect.left + rect.width / 2, tcy = rect.top + rect.height / 2;
+                            const ox = (mouseX - tcx) * parallaxStrength, oy = (mouseY - tcy) * parallaxStrength;
+                            offsets.forEach(o => { o.x += ox; o.y += oy; });
                         }
 
                         const tl = gsap.timeline();
-                        const corners = [tlc, trc, brc, blc];
-                        const offsets = [tlOffset, trOffset, brOffset, blOffset];
-
-                        corners.forEach((corner, index) => {
-                            tl.to(
-                                corner,
-                                {
-                                    x: offsets[index].x,
-                                    y: offsets[index].y,
-                                    duration: 0.2,
-                                    ease: 'power2.out'
-                                },
-                                0
-                            );
+                        Array.from(cornersRef.current).forEach((corner, i) => {
+                            tl.to(corner, { x: offsets[i].x, y: offsets[i].y, duration: 0.2, ease: 'power2.out' }, 0);
                         });
                     };
 
                     isAnimatingToTarget = true;
                     updateCorners();
-
-                    setTimeout(() => {
-                        isAnimatingToTarget = false;
-                    }, 1);
+                    setTimeout(() => { isAnimatingToTarget = false; }, 1);
 
                     let moveThrottle = null;
                     const targetMove = ev => {
                         if (moveThrottle || isAnimatingToTarget) return;
-                        moveThrottle = requestAnimationFrame(() => {
-                            const mouseEvent = ev;
-                            updateCorners(mouseEvent.clientX, mouseEvent.clientY);
-                            moveThrottle = null;
-                        });
+                        moveThrottle = requestAnimationFrame(() => { updateCorners(ev.clientX, ev.clientY); moveThrottle = null; });
                     };
 
                     const leaveHandler = () => {
-                        activeTarget = null;
-                        isAnimatingToTarget = false;
-
+                        activeTarget = null; isAnimatingToTarget = false;
                         if (cornersRef.current) {
-                            const corners = Array.from(cornersRef.current);
-                            gsap.killTweensOf(corners);
-
                             const { cornerSize } = constants;
                             const positions = [
-                                { x: -cornerSize * 1.5, y: -cornerSize * 1.5 },
-                                { x: cornerSize * 0.5, y: -cornerSize * 1.5 },
-                                { x: cornerSize * 0.5, y: cornerSize * 0.5 },
-                                { x: -cornerSize * 1.5, y: cornerSize * 0.5 }
+                                { x: -cornerSize*1.5, y: -cornerSize*1.5 },
+                                { x: cornerSize*0.5,  y: -cornerSize*1.5 },
+                                { x: cornerSize*0.5,  y: cornerSize*0.5 },
+                                { x: -cornerSize*1.5, y: cornerSize*0.5 }
                             ];
-
                             const tl = gsap.timeline();
-                            corners.forEach((corner, index) => {
-                                tl.to(
-                                    corner,
-                                    {
-                                        x: positions[index].x,
-                                        y: positions[index].y,
-                                        duration: 0.3,
-                                        ease: 'power3.out'
-                                    },
-                                    0
-                                );
+                            Array.from(cornersRef.current).forEach((corner, i) => {
+                                tl.to(corner, { x: positions[i].x, y: positions[i].y, duration: 0.3, ease: 'power3.out' }, 0);
                             });
                         }
-
                         resumeTimeout = setTimeout(() => {
                             if (!activeTarget && cursorRef.current && spinTl.current) {
-                                const currentRotation = gsap.getProperty(cursorRef.current, 'rotation');
-                                const normalizedRotation = currentRotation % 360;
-
+                                const cur = gsap.getProperty(cursorRef.current, 'rotation') % 360;
                                 spinTl.current.kill();
-                                spinTl.current = gsap
-                                    .timeline({ repeat: -1 })
-                                    .to(cursorRef.current, { rotation: '+=360', duration: spinDuration, ease: 'none' });
-
-                                gsap.to(cursorRef.current, {
-                                    rotation: normalizedRotation + 360,
-                                    duration: spinDuration * (1 - normalizedRotation / 360),
-                                    ease: 'none',
-                                    onComplete: () => {
-                                        spinTl.current?.restart();
-                                    }
-                                });
+                                spinTl.current = gsap.timeline({ repeat: -1 }).to(cursorRef.current, { rotation: '+=360', duration: spinDuration, ease: 'none' });
+                                gsap.to(cursorRef.current, { rotation: cur + 360, duration: spinDuration * (1 - cur / 360), ease: 'none', onComplete: () => spinTl.current?.restart() });
                             }
                             resumeTimeout = null;
                         }, 50);
-
                         cleanupTarget(target);
                     };
 
                     currentTargetMove = targetMove;
                     currentLeaveHandler = leaveHandler;
-
                     target.addEventListener('mousemove', targetMove);
                     target.addEventListener('mouseleave', leaveHandler);
                 };
@@ -1527,11 +1279,7 @@
                     window.removeEventListener('scroll', scrollHandler);
                     window.removeEventListener('mousedown', mouseDownHandler);
                     window.removeEventListener('mouseup', mouseUpHandler);
-
-                    if (activeTarget) {
-                        cleanupTarget(activeTarget);
-                    }
-
+                    if (activeTarget) cleanupTarget(activeTarget);
                     spinTl.current?.kill();
                     document.body.style.cursor = originalCursor;
                 };
@@ -1548,174 +1296,102 @@
             );
         };
 
-        // Matrix Background Component
+        // ─── Matrix Background ───
         const MatrixBackground = () => {
             const canvasRef = useRef(null);
-
             useEffect(() => {
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext('2d');
-
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
 
-                const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-                const matrixArray = matrix.split('');
-
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}".split('');
                 const fontSize = 20;
                 const columns = canvas.width / fontSize;
+                const drops = Array.from({ length: columns }, () => 1);
 
-                const drops = [];
-                for (let x = 0; x < columns; x++) {
-                    drops[x] = 1;
-                }
-
-                function drawMatrix() {
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+                function draw() {
+                    ctx.fillStyle = 'rgba(0,0,0,0.08)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
                     ctx.font = fontSize + 'px monospace';
 
                     for (let i = 0; i < drops.length; i++) {
-                        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                        const x = i * fontSize;
-                        const y = drops[i] * fontSize;
-
+                        const text = chars[Math.floor(Math.random() * chars.length)];
+                        const x = i * fontSize, y = drops[i] * fontSize;
                         ctx.fillStyle = '#D4AF37';
                         ctx.fillText(text, x, y);
 
                         if (Math.random() < 0.08) {
-                            let baseX = x;
-                            let baseY = y;
-
                             for (let j = 0; j < 3; j++) {
-                                let offsetX = (Math.random() - 0.5) * 20;
-                                let offsetY = (Math.random() - 0.5) * 6;
-
-                                let colors = ["#00FFFF", "#FF00FF", "#FF1493", "#FFFFFF"];
-                                ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-
-                                ctx.fillText(text, baseX + offsetX, baseY + offsetY);
+                                ctx.fillStyle = ["#00FFFF","#FF00FF","#FF1493","#FFFFFF"][Math.floor(Math.random()*4)];
+                                ctx.fillText(text, x + (Math.random()-0.5)*20, y + (Math.random()-0.5)*6);
                             }
-
                             if (Math.random() < 0.2) {
                                 ctx.fillStyle = "#FFFFFF";
-                                ctx.fillText(text, baseX, baseY - 2);
-                                ctx.fillText(text, baseX + 5, baseY + 2);
+                                ctx.fillText(text, x, y-2);
+                                ctx.fillText(text, x+5, y+2);
                             }
                         }
-
-                        if (y > canvas.height && Math.random() > 0.975) {
-                            drops[i] = 0;
-                        }
+                        if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
                         drops[i]++;
                     }
 
                     if (Math.random() < 0.03) {
-                        let sliceY = Math.floor(Math.random() * canvas.height);
-                        let sliceHeight = fontSize * 2;
-                        let sliceX = (Math.random() - 0.5) * 40;
-
-                        let imageData = ctx.getImageData(0, sliceY, canvas.width, sliceHeight);
-                        ctx.putImageData(imageData, sliceX, sliceY);
+                        const sliceY = Math.floor(Math.random() * canvas.height);
+                        const data = ctx.getImageData(0, sliceY, canvas.width, fontSize * 2);
+                        ctx.putImageData(data, (Math.random()-0.5)*40, sliceY);
                     }
                 }
 
-                const interval = setInterval(drawMatrix, 35);
-
-                const handleResize = () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                };
-
-                window.addEventListener('resize', handleResize);
-
-                return () => {
-                    clearInterval(interval);
-                    window.removeEventListener('resize', handleResize);
-                };
+                const interval = setInterval(draw, 35);
+                const onResize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+                window.addEventListener('resize', onResize);
+                return () => { clearInterval(interval); window.removeEventListener('resize', onResize); };
             }, []);
-
             return <canvas ref={canvasRef} id="matrix-canvas" />;
         };
 
-        // Profile Card Component
-        const ProfileCard = ({ 
-            avatarUrl = 'https://via.placeholder.com/500x500/0a1628/f4d03f?text=RAJVANSH',
-            name = 'Rajvansh Rana',
-            title = 'Web Developer',
-            handle = 'rajvansh977',
-            status = 'Available for Work'
-        }) => {
+        // ─── Profile Card ───
+        const ProfileCard = ({ avatarUrl = 'https://via.placeholder.com/500x500/0a1628/f4d03f?text=RAJVANSH', name = 'Rajvansh Rana', title = 'Web Developer', handle = 'rajvansh977', status = 'Available for Work' }) => {
             const wrapRef = useRef(null);
             const cardRef = useRef(null);
 
             useEffect(() => {
-                const card = cardRef.current;
-                const wrap = wrapRef.current;
+                const card = cardRef.current, wrap = wrapRef.current;
                 if (!card || !wrap) return;
 
-                let rafId = null;
-
-                const updateCardTransform = (offsetX, offsetY) => {
-                    const width = card.clientWidth;
-                    const height = card.clientHeight;
-                    const percentX = Math.min(Math.max((100 / width) * offsetX, 0), 100);
-                    const percentY = Math.min(Math.max((100 / height) * offsetY, 0), 100);
-                    const centerX = percentX - 50;
-                    const centerY = percentY - 50;
-
-                    wrap.style.setProperty('--pointer-x', `${percentX}%`);
-                    wrap.style.setProperty('--pointer-y', `${percentY}%`);
-                    wrap.style.setProperty('--rotate-x', `${-(centerX / 5)}deg`);
-                    wrap.style.setProperty('--rotate-y', `${centerY / 4}deg`);
+                const update = (ox, oy) => {
+                    const w = card.clientWidth, h = card.clientHeight;
+                    const px = Math.min(Math.max((100/w)*ox,0),100);
+                    const py = Math.min(Math.max((100/h)*oy,0),100);
+                    wrap.style.setProperty('--pointer-x', px+'%');
+                    wrap.style.setProperty('--pointer-y', py+'%');
+                    wrap.style.setProperty('--rotate-x', (-(px-50)/5)+'deg');
+                    wrap.style.setProperty('--rotate-y', ((py-50)/4)+'deg');
                 };
 
-                const handlePointerMove = (e) => {
-                    const rect = card.getBoundingClientRect();
-                    updateCardTransform(e.clientX - rect.left, e.clientY - rect.top);
-                };
+                const onEnter = () => { wrap.classList.add('pc-active'); card.classList.add('pc-active'); };
+                const onMove  = e => { const r = card.getBoundingClientRect(); update(e.clientX-r.left, e.clientY-r.top); };
+                const onLeave = () => { wrap.classList.remove('pc-active'); card.classList.remove('pc-active'); setTimeout(() => update(card.clientWidth/2, card.clientHeight/2), 100); };
 
-                const handlePointerEnter = () => {
-                    wrap.classList.add('pc-active');
-                    card.classList.add('pc-active');
-                };
+                card.addEventListener('pointerenter', onEnter);
+                card.addEventListener('pointermove', onMove);
+                card.addEventListener('pointerleave', onLeave);
+                update(card.clientWidth/2, card.clientHeight/2);
 
-                const handlePointerLeave = () => {
-                    wrap.classList.remove('pc-active');
-                    card.classList.remove('pc-active');
-                    setTimeout(() => {
-                        updateCardTransform(card.clientWidth / 2, card.clientHeight / 2);
-                    }, 100);
-                };
-
-                card.addEventListener('pointerenter', handlePointerEnter);
-                card.addEventListener('pointermove', handlePointerMove);
-                card.addEventListener('pointerleave', handlePointerLeave);
-
-                updateCardTransform(card.clientWidth / 2, card.clientHeight / 2);
-
-                return () => {
-                    card.removeEventListener('pointerenter', handlePointerEnter);
-                    card.removeEventListener('pointermove', handlePointerMove);
-                    card.removeEventListener('pointerleave', handlePointerLeave);
-                    if (rafId) cancelAnimationFrame(rafId);
-                };
+                return () => { card.removeEventListener('pointerenter', onEnter); card.removeEventListener('pointermove', onMove); card.removeEventListener('pointerleave', onLeave); };
             }, []);
 
             return (
                 <div ref={wrapRef} className="pc-card-wrapper cursor-target">
                     <section ref={cardRef} className="pc-card">
                         <div className="pc-inside">
-                            <div className="pc-shine" />
-                            <div className="pc-glare" />
+                            <div className="pc-shine" /><div className="pc-glare" />
                             <div className="pc-content pc-avatar-content">
                                 <img className="pc-avatar" src={avatarUrl} alt={`${name} avatar`} />
                                 <div className="pc-user-info">
                                     <div className="pc-user-details">
-                                        <div className="pc-mini-avatar">
-                                            <img src={avatarUrl} alt={`${name} mini`} />
-                                        </div>
+                                        <div className="pc-mini-avatar"><img src={avatarUrl} alt={`${name} mini`} /></div>
                                         <div className="pc-user-text">
                                             <div className="pc-handle">@{handle}</div>
                                             <div className="pc-status">{status}</div>
@@ -1725,10 +1401,7 @@
                                 </div>
                             </div>
                             <div className="pc-content">
-                                <div className="pc-details">
-                                    <h3>{name}</h3>
-                                    <p>{title}</p>
-                                </div>
+                                <div className="pc-details"><h3>{name}</h3><p>{title}</p></div>
                             </div>
                         </div>
                     </section>
@@ -1736,441 +1409,137 @@
             );
         };
 
-        // AI Tech Stack Recommender Component
+        // ─── AI Tech Stack Recommender ───
         const AITechStack = () => {
             const [isOpen, setIsOpen] = useState(false);
             const [projectType, setProjectType] = useState('');
-            const [requirements, setRequirements] = useState({
-                realtime: false,
-                auth: false,
-                payment: false,
-                animation: false,
-                mobile: false,
-                seo: false,
-                ai: false,
-                notifications: false,
-                fileUpload: false,
-                multiLanguage: false,
-                analytics: false,
-                pwa: false
-            });
+            const [requirements, setRequirements] = useState({ realtime:false, auth:false, payment:false, animation:false, mobile:false, seo:false, ai:false, notifications:false, fileUpload:false, multiLanguage:false, analytics:false, pwa:false });
             const [recommendation, setRecommendation] = useState(null);
             const [isAnalyzing, setIsAnalyzing] = useState(false);
 
             const projectTypes = [
-                { value: 'ecommerce', label: '🛒 E-commerce Store', icon: '🛒' },
-                { value: 'social', label: '👥 Social Media App', icon: '👥' },
-                { value: 'portfolio', label: '💼 Portfolio Website', icon: '💼' },
-                { value: 'saas', label: '☁️ SaaS Application', icon: '☁️' },
-                { value: 'blog', label: '📝 Blog/CMS', icon: '📝' },
-                { value: 'dashboard', label: '📊 Dashboard/Analytics', icon: '📊' },
-                { value: 'game', label: '🎮 Browser Game', icon: '🎮' },
-                { value: 'chat', label: '💬 Chat Application', icon: '💬' },
-                { value: 'marketplace', label: '🏪 Marketplace Platform', icon: '🏪' },
-                { value: 'booking', label: '📅 Booking System', icon: '📅' },
-                { value: 'learning', label: '🎓 E-Learning Platform', icon: '🎓' },
-                { value: 'streaming', label: '📺 Video Streaming', icon: '📺' },
-                { value: 'crm', label: '📞 CRM System', icon: '📞' },
-                { value: 'iot', label: '🌐 IoT Dashboard', icon: '🌐' },
-                { value: 'fintech', label: '💰 Fintech App', icon: '💰' },
-                { value: 'healthcare', label: '🏥 Healthcare Portal', icon: '🏥' }
+                { value:'ecommerce',  label:'🛒 E-commerce',   icon:'🛒' },
+                { value:'social',     label:'👥 Social Media',  icon:'👥' },
+                { value:'portfolio',  label:'💼 Portfolio',      icon:'💼' },
+                { value:'saas',       label:'☁️ SaaS App',       icon:'☁️' },
+                { value:'blog',       label:'📝 Blog/CMS',       icon:'📝' },
+                { value:'dashboard',  label:'📊 Dashboard',      icon:'📊' },
+                { value:'game',       label:'🎮 Browser Game',   icon:'🎮' },
+                { value:'chat',       label:'💬 Chat App',        icon:'💬' },
+                { value:'marketplace',label:'🏪 Marketplace',    icon:'🏪' },
+                { value:'booking',    label:'📅 Booking',         icon:'📅' },
+                { value:'learning',   label:'🎓 E-Learning',     icon:'🎓' },
+                { value:'streaming',  label:'📺 Streaming',      icon:'📺' },
+                { value:'crm',        label:'📞 CRM',             icon:'📞' },
+                { value:'iot',        label:'🌐 IoT',             icon:'🌐' },
+                { value:'fintech',    label:'💰 Fintech',         icon:'💰' },
+                { value:'healthcare', label:'🏥 Healthcare',      icon:'🏥' }
             ];
 
-            const getTechStackRecommendation = () => {
-                const recommendations = {
-                    ecommerce: {
-                        frontend: requirements.seo ? 'Next.js + TypeScript' : 'React + TypeScript',
-                        backend: 'Node.js + Express',
-                        database: 'MongoDB + Redis',
-                        payment: requirements.payment ? 'Stripe API' : 'Not Required',
-                        auth: 'NextAuth.js / JWT',
-                        hosting: 'Vercel (Frontend) + Railway (Backend)',
-                        extras: ['Tailwind CSS', 'Zustand/Redux', 'React Query'],
-                        reason: 'This stack provides fast SSR for SEO, secure payments, and scalable architecture for e-commerce.'
-                    },
-                    social: {
-                        frontend: 'React + Vite',
-                        backend: 'Node.js + Socket.io',
-                        database: 'PostgreSQL + Redis',
-                        realtime: requirements.realtime ? 'Socket.io + WebRTC' : 'Socket.io',
-                        auth: 'Firebase Auth',
-                        hosting: 'Vercel + AWS EC2',
-                        extras: ['Tailwind CSS', 'Framer Motion', 'React Query', 'Cloudinary'],
-                        reason: 'Real-time updates, scalable user management, and efficient media handling for social platforms.'
-                    },
-                    portfolio: {
-                        frontend: requirements.animation ? 'React + GSAP + Three.js' : 'Next.js',
-                        backend: requirements.realtime ? 'Node.js + Express' : 'Serverless Functions',
-                        database: requirements.auth ? 'Firebase' : 'Not Required',
-                        animation: requirements.animation ? 'GSAP + Framer Motion + Three.js' : 'CSS Animations',
-                        hosting: 'Vercel / Netlify',
-                        extras: ['Tailwind CSS', 'React Email', 'Analytics'],
-                        reason: 'Optimized for visual storytelling, fast loading, and impressive animations to showcase work.'
-                    },
-                    saas: {
-                        frontend: 'Next.js 14 + TypeScript',
-                        backend: 'Node.js + tRPC / GraphQL',
-                        database: 'PostgreSQL + Prisma',
-                        auth: 'NextAuth.js + OAuth',
-                        payment: requirements.payment ? 'Stripe Subscriptions' : 'Not Required',
-                        hosting: 'Vercel + Supabase',
-                        extras: ['Shadcn UI', 'React Query', 'Zustand', 'Zod Validation'],
-                        reason: 'Type-safe, scalable architecture with subscription management and real-time data sync.'
-                    },
-                    blog: {
-                        frontend: requirements.seo ? 'Next.js 14 + MDX' : 'Astro',
-                        backend: 'Headless CMS (Sanity/Contentful)',
-                        database: 'CMS Built-in',
-                        auth: requirements.auth ? 'NextAuth.js' : 'Not Required',
-                        hosting: 'Vercel / Cloudflare Pages',
-                        extras: ['Tailwind Typography', 'RSS Feed', 'Syntax Highlighting'],
-                        reason: 'Blazing fast SSG/SSR, excellent SEO, and easy content management for blogs.'
-                    },
-                    dashboard: {
-                        frontend: 'React + TypeScript + Recharts',
-                        backend: 'Node.js + Express',
-                        database: 'PostgreSQL + TimescaleDB',
-                        realtime: requirements.realtime ? 'WebSocket + Redis Pub/Sub' : 'REST API',
-                        auth: 'JWT + Role-Based Access',
-                        hosting: 'AWS / DigitalOcean',
-                        extras: ['Recharts', 'Tanstack Table', 'React Query', 'Zustand'],
-                        reason: 'Optimized for data visualization, real-time updates, and complex state management.'
-                    },
-                    game: {
-                        frontend: 'React + Three.js / Phaser',
-                        backend: requirements.realtime ? 'Node.js + Socket.io + Colyseus' : 'Firebase',
-                        database: 'MongoDB / Firebase',
-                        realtime: requirements.realtime ? 'Socket.io + Multiplayer Engine' : 'Single Player',
-                        auth: requirements.auth ? 'Firebase Auth' : 'Local Storage',
-                        hosting: 'Vercel + Firebase',
-                        extras: ['Three.js', 'R3F', 'GSAP', 'Howler.js (Audio)'],
-                        reason: 'High-performance 3D rendering, real-time multiplayer, and smooth animations for games.'
-                    },
-                    chat: {
-                        frontend: 'React + TypeScript',
-                        backend: 'Node.js + Socket.io',
-                        database: 'MongoDB + Redis',
-                        realtime: 'Socket.io + WebRTC',
-                        auth: 'JWT + OAuth',
-                        hosting: 'AWS / DigitalOcean',
-                        extras: ['Emoji Picker', 'File Upload (AWS S3)', 'Push Notifications'],
-                        reason: 'Real-time messaging, media sharing, and scalable user presence management.'
-                    },
-                    marketplace: {
-                        frontend: 'Next.js 14 + TypeScript',
-                        backend: 'Node.js + GraphQL',
-                        database: 'PostgreSQL + Elasticsearch',
-                        payment: requirements.payment ? 'Stripe Connect (Multi-vendor)' : 'Basic Stripe',
-                        auth: 'NextAuth.js + OAuth',
-                        hosting: 'Vercel + AWS',
-                        extras: ['Algolia Search', 'Cloudinary', 'Stripe Webhooks', 'Email Service'],
-                        reason: 'Multi-vendor support, advanced search, secure payments, and scalable architecture.'
-                    },
-                    booking: {
-                        frontend: 'React + TypeScript + React Calendar',
-                        backend: 'Node.js + Express',
-                        database: 'PostgreSQL + Redis (Caching)',
-                        realtime: requirements.realtime ? 'Socket.io (Live Availability)' : 'REST API',
-                        payment: requirements.payment ? 'Stripe + PayPal' : 'Not Required',
-                        auth: 'JWT + OAuth',
-                        hosting: 'Vercel + Railway',
-                        extras: ['Google Calendar API', 'Twilio (SMS)', 'Email Reminders', 'Timezone Support'],
-                        reason: 'Real-time availability updates, payment processing, and automated notifications.'
-                    },
-                    learning: {
-                        frontend: 'Next.js + TypeScript + MDX',
-                        backend: 'Node.js + tRPC',
-                        database: 'PostgreSQL + S3 (Video Storage)',
-                        realtime: requirements.realtime ? 'Socket.io (Live Classes)' : 'Not Required',
-                        auth: 'NextAuth.js + Role-Based Access',
-                        payment: requirements.payment ? 'Stripe Subscriptions' : 'Free Model',
-                        hosting: 'Vercel + AWS',
-                        extras: ['Video.js', 'Quiz System', 'Progress Tracking', 'Certificate Generation'],
-                        reason: 'Video streaming, progress tracking, interactive quizzes, and subscription management.'
-                    },
-                    streaming: {
-                        frontend: 'Next.js + React Player',
-                        backend: 'Node.js + HLS Streaming',
-                        database: 'MongoDB + AWS S3',
-                        realtime: requirements.realtime ? 'Socket.io (Live Chat)' : 'Not Required',
-                        auth: 'JWT + OAuth',
-                        hosting: 'AWS CloudFront + EC2',
-                        extras: ['Video.js', 'FFmpeg (Transcoding)', 'CDN', 'Adaptive Bitrate'],
-                        reason: 'High-performance video delivery, adaptive streaming, and global CDN distribution.'
-                    },
-                    crm: {
-                        frontend: 'React + TypeScript + Tanstack Table',
-                        backend: 'Node.js + GraphQL',
-                        database: 'PostgreSQL + Redis',
-                        realtime: requirements.realtime ? 'Socket.io (Live Updates)' : 'REST API',
-                        auth: 'JWT + Role-Based Access Control',
-                        hosting: 'AWS / Azure',
-                        extras: ['Email Integration', 'Calendar Sync', 'Report Generation', 'Analytics'],
-                        reason: 'Customer relationship management with advanced data tables and real-time collaboration.'
-                    },
-                    iot: {
-                        frontend: 'React + Recharts + Three.js',
-                        backend: 'Node.js + MQTT + WebSocket',
-                        database: 'InfluxDB (Time-Series) + PostgreSQL',
-                        realtime: 'MQTT + WebSocket (Device Communication)',
-                        auth: 'JWT + Device Authentication',
-                        hosting: 'AWS IoT Core + EC2',
-                        extras: ['Chart.js', 'Device Management', 'Alert System', 'Data Visualization'],
-                        reason: 'Real-time device monitoring, time-series data storage, and IoT protocol support.'
-                    },
-                    fintech: {
-                        frontend: 'Next.js 14 + TypeScript + Recharts',
-                        backend: 'Node.js + Express (PCI-DSS Compliant)',
-                        database: 'PostgreSQL (Encrypted) + Redis',
-                        payment: 'Stripe + Plaid API',
-                        auth: 'Multi-Factor Authentication + Biometric',
-                        hosting: 'AWS (Compliance-Ready)',
-                        extras: ['Encryption (AES-256)', 'Audit Logs', 'KYC Integration', 'Transaction Monitoring'],
-                        reason: 'Bank-level security, regulatory compliance, and secure financial transaction processing.'
-                    },
-                    healthcare: {
-                        frontend: 'Next.js + TypeScript (HIPAA-Compliant)',
-                        backend: 'Node.js + Express (Encrypted)',
-                        database: 'PostgreSQL (Encrypted) + AWS S3 (Medical Records)',
-                        realtime: requirements.realtime ? 'Socket.io (Telemedicine)' : 'Not Required',
-                        auth: 'Multi-Factor Authentication',
-                        hosting: 'AWS (HIPAA-Compliant Hosting)',
-                        extras: ['Video Consultation (WebRTC)', 'E-Prescription', 'Appointment Booking', 'Patient Portal'],
-                        reason: 'HIPAA compliance, secure patient data management, and telemedicine capabilities.'
-                    }
-                };
+            const reqLabels = { realtime:'⚡ Real-time Updates', auth:'🔐 Authentication', payment:'💳 Payment Integration', animation:'✨ Advanced Animations', mobile:'📱 Mobile App', seo:'🔍 SEO Optimized', ai:'🤖 AI Integration', notifications:'🔔 Push Notifications', fileUpload:'📁 File Upload', multiLanguage:'🌍 Multi-Language', analytics:'📊 Analytics', pwa:'📲 Progressive Web App' };
 
-                return recommendations[projectType] || recommendations.portfolio;
+            const stacks = {
+                ecommerce:  { frontend: req => req.seo?'Next.js + TypeScript':'React + TypeScript', backend:'Node.js + Express', database:'MongoDB + Redis', payment: req => req.payment?'Stripe API':'Not Required', auth:'NextAuth.js / JWT', hosting:'Vercel (Frontend) + Railway (Backend)', extras:['Tailwind CSS','Zustand/Redux','React Query'], reason:'This stack provides fast SSR for SEO, secure payments, and scalable architecture for e-commerce.' },
+                social:     { frontend:'React + Vite', backend:'Node.js + Socket.io', database:'PostgreSQL + Redis', realtime: req => req.realtime?'Socket.io + WebRTC':'Socket.io', auth:'Firebase Auth', hosting:'Vercel + AWS EC2', extras:['Tailwind CSS','Framer Motion','React Query','Cloudinary'], reason:'Real-time updates, scalable user management, and efficient media handling for social platforms.' },
+                portfolio:  { frontend: req => req.animation?'React + GSAP + Three.js':'Next.js', backend: req => req.realtime?'Node.js + Express':'Serverless Functions', database: req => req.auth?'Firebase':'Not Required', animation: req => req.animation?'GSAP + Framer Motion + Three.js':'CSS Animations', hosting:'Vercel / Netlify', extras:['Tailwind CSS','React Email','Analytics'], reason:'Optimized for visual storytelling, fast loading, and impressive animations to showcase work.' },
+                saas:       { frontend:'Next.js 14 + TypeScript', backend:'Node.js + tRPC / GraphQL', database:'PostgreSQL + Prisma', auth:'NextAuth.js + OAuth', payment: req => req.payment?'Stripe Subscriptions':'Not Required', hosting:'Vercel + Supabase', extras:['Shadcn UI','React Query','Zustand','Zod Validation'], reason:'Type-safe, scalable architecture with subscription management and real-time data sync.' },
+                blog:       { frontend: req => req.seo?'Next.js 14 + MDX':'Astro', backend:'Headless CMS (Sanity/Contentful)', database:'CMS Built-in', auth: req => req.auth?'NextAuth.js':'Not Required', hosting:'Vercel / Cloudflare Pages', extras:['Tailwind Typography','RSS Feed','Syntax Highlighting'], reason:'Blazing fast SSG/SSR, excellent SEO, and easy content management for blogs.' },
+                dashboard:  { frontend:'React + TypeScript + Recharts', backend:'Node.js + Express', database:'PostgreSQL + TimescaleDB', realtime: req => req.realtime?'WebSocket + Redis Pub/Sub':'REST API', auth:'JWT + Role-Based Access', hosting:'AWS / DigitalOcean', extras:['Recharts','Tanstack Table','React Query','Zustand'], reason:'Optimized for data visualization, real-time updates, and complex state management.' },
+                game:       { frontend:'React + Three.js / Phaser', backend: req => req.realtime?'Node.js + Socket.io + Colyseus':'Firebase', database:'MongoDB / Firebase', realtime: req => req.realtime?'Socket.io + Multiplayer Engine':'Single Player', auth: req => req.auth?'Firebase Auth':'Local Storage', hosting:'Vercel + Firebase', extras:['Three.js','R3F','GSAP','Howler.js (Audio)'], reason:'High-performance 3D rendering, real-time multiplayer, and smooth animations for games.' },
+                chat:       { frontend:'React + TypeScript', backend:'Node.js + Socket.io', database:'MongoDB + Redis', realtime:'Socket.io + WebRTC', auth:'JWT + OAuth', hosting:'AWS / DigitalOcean', extras:['Emoji Picker','File Upload (AWS S3)','Push Notifications'], reason:'Real-time messaging, media sharing, and scalable user presence management.' },
+                marketplace:{ frontend:'Next.js 14 + TypeScript', backend:'Node.js + GraphQL', database:'PostgreSQL + Elasticsearch', payment: req => req.payment?'Stripe Connect (Multi-vendor)':'Basic Stripe', auth:'NextAuth.js + OAuth', hosting:'Vercel + AWS', extras:['Algolia Search','Cloudinary','Stripe Webhooks','Email Service'], reason:'Multi-vendor support, advanced search, secure payments, and scalable architecture.' },
+                booking:    { frontend:'React + TypeScript + React Calendar', backend:'Node.js + Express', database:'PostgreSQL + Redis (Caching)', realtime: req => req.realtime?'Socket.io (Live Availability)':'REST API', payment: req => req.payment?'Stripe + PayPal':'Not Required', auth:'JWT + OAuth', hosting:'Vercel + Railway', extras:['Google Calendar API','Twilio (SMS)','Email Reminders','Timezone Support'], reason:'Real-time availability updates, payment processing, and automated notifications.' },
+                learning:   { frontend:'Next.js + TypeScript + MDX', backend:'Node.js + tRPC', database:'PostgreSQL + S3 (Video Storage)', realtime: req => req.realtime?'Socket.io (Live Classes)':'Not Required', auth:'NextAuth.js + Role-Based Access', payment: req => req.payment?'Stripe Subscriptions':'Free Model', hosting:'Vercel + AWS', extras:['Video.js','Quiz System','Progress Tracking','Certificate Generation'], reason:'Video streaming, progress tracking, interactive quizzes, and subscription management.' },
+                streaming:  { frontend:'Next.js + React Player', backend:'Node.js + HLS Streaming', database:'MongoDB + AWS S3', realtime: req => req.realtime?'Socket.io (Live Chat)':'Not Required', auth:'JWT + OAuth', hosting:'AWS CloudFront + EC2', extras:['Video.js','FFmpeg (Transcoding)','CDN','Adaptive Bitrate'], reason:'High-performance video delivery, adaptive streaming, and global CDN distribution.' },
+                crm:        { frontend:'React + TypeScript + Tanstack Table', backend:'Node.js + GraphQL', database:'PostgreSQL + Redis', realtime: req => req.realtime?'Socket.io (Live Updates)':'REST API', auth:'JWT + Role-Based Access Control', hosting:'AWS / Azure', extras:['Email Integration','Calendar Sync','Report Generation','Analytics'], reason:'Customer relationship management with advanced data tables and real-time collaboration.' },
+                iot:        { frontend:'React + Recharts + Three.js', backend:'Node.js + MQTT + WebSocket', database:'InfluxDB (Time-Series) + PostgreSQL', realtime:'MQTT + WebSocket (Device Communication)', auth:'JWT + Device Authentication', hosting:'AWS IoT Core + EC2', extras:['Chart.js','Device Management','Alert System','Data Visualization'], reason:'Real-time device monitoring, time-series data storage, and IoT protocol support.' },
+                fintech:    { frontend:'Next.js 14 + TypeScript + Recharts', backend:'Node.js + Express (PCI-DSS Compliant)', database:'PostgreSQL (Encrypted) + Redis', payment:'Stripe + Plaid API', auth:'Multi-Factor Authentication + Biometric', hosting:'AWS (Compliance-Ready)', extras:['Encryption (AES-256)','Audit Logs','KYC Integration','Transaction Monitoring'], reason:'Bank-level security, regulatory compliance, and secure financial transaction processing.' },
+                healthcare: { frontend:'Next.js + TypeScript (HIPAA-Compliant)', backend:'Node.js + Express (Encrypted)', database:'PostgreSQL (Encrypted) + AWS S3 (Medical Records)', realtime: req => req.realtime?'Socket.io (Telemedicine)':'Not Required', auth:'Multi-Factor Authentication', hosting:'AWS (HIPAA-Compliant Hosting)', extras:['Video Consultation (WebRTC)','E-Prescription','Appointment Booking','Patient Portal'], reason:'HIPAA compliance, secure patient data management, and telemedicine capabilities.' }
+            };
+
+            const getRecommendation = () => {
+                const template = stacks[projectType] || stacks.portfolio;
+                const result = {};
+                Object.entries(template).forEach(([key, val]) => {
+                    result[key] = typeof val === 'function' ? val(requirements) : val;
+                });
+                return result;
             };
 
             const handleAnalyze = () => {
-                if (!projectType) {
-                    alert('Please select a project type!');
-                    return;
-                }
-
+                if (!projectType) { alert('Please select a project type!'); return; }
                 setIsAnalyzing(true);
-
-                setTimeout(() => {
-                    const stack = getTechStackRecommendation();
-                    setRecommendation(stack);
-                    setIsAnalyzing(false);
-                }, 2000);
+                setTimeout(() => { setRecommendation(getRecommendation()); setIsAnalyzing(false); }, 2000);
             };
 
             const handleReset = () => {
                 setProjectType('');
-                setRequirements({
-                    realtime: false,
-                    auth: false,
-                    payment: false,
-                    animation: false,
-                    mobile: false,
-                    seo: false
-                });
+                setRequirements({ realtime:false, auth:false, payment:false, animation:false, mobile:false, seo:false, ai:false, notifications:false, fileUpload:false, multiLanguage:false, analytics:false, pwa:false });
                 setRecommendation(null);
             };
 
             return (
                 <div className="ai-chat-container">
-                    <button 
-                        className="ai-chat-button cursor-target" 
-                        onClick={() => setIsOpen(!isOpen)}
-                        title="AI Tech Stack Recommender"
-                    >
-                        <img src="bot.png" alt="Stationery" style={{ width: "40px" }} />
+                    <button className="ai-chat-button cursor-target" onClick={() => setIsOpen(!isOpen)} title="AI Tech Stack Recommender">
+                        <img src="bot.png" alt="Bot" style={{ width:'40px' }} />
                     </button>
-                    
-                    <div className={`ai-chat-window ${isOpen ? 'open' : ''}`} style={{height: '600px', width: '420px'}}>
+                    <div className={`ai-chat-window ${isOpen?'open':''}`} style={{height:'600px',width:'420px'}}>
                         <div className="ai-chat-header">
                             <h4>🚀 Tech Stack AI</h4>
-                            <button 
-                                className="ai-chat-close cursor-target" 
-                                onClick={() => setIsOpen(false)}
-                            >
-                                ×
-                            </button>
+                            <button className="ai-chat-close cursor-target" onClick={() => setIsOpen(false)}>×</button>
                         </div>
-                        
-                        <div className="ai-chat-messages" style={{padding: '20px'}}>
+                        <div className="ai-chat-messages" style={{padding:'20px'}}>
                             {!recommendation ? (
                                 <>
-                                    <div style={{marginBottom: '20px'}}>
-                                        <h5 style={{color: '#f4d03f', fontSize: '1rem', marginBottom: '15px', fontWeight: '700'}}>
-                                            SELECT PROJECT TYPE
-                                        </h5>
-                                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px'}}>
+                                    <div style={{marginBottom:'20px'}}>
+                                        <h5 style={{color:'#f4d03f',fontSize:'1rem',marginBottom:'15px',fontWeight:'700'}}>SELECT PROJECT TYPE</h5>
+                                        <div style={{display:'grid',gridTemplateColumns:'repeat(2, 1fr)',gap:'10px'}}>
                                             {projectTypes.map(type => (
-                                                <button
-                                                    key={type.value}
-                                                    onClick={() => setProjectType(type.value)}
-                                                    className="cursor-target"
-                                                    style={{
-                                                        padding: '12px',
-                                                        background: projectType === type.value ? 'linear-gradient(135deg, #f4d03f, #e8f4f8)' : 'rgba(244, 208, 63, 0.1)',
-                                                        border: `2px solid ${projectType === type.value ? '#f4d03f' : 'rgba(244, 208, 63, 0.3)'}`,
-                                                        borderRadius: '8px',
-                                                        color: projectType === type.value ? '#0a1628' : '#e8f4f8',
-                                                        fontFamily: 'Orbitron, monospace',
-                                                        fontSize: '0.85rem',
-                                                        fontWeight: '700',
-                                                        cursor: 'pointer',
-                                                        transition: 'all 0.3s ease',
-                                                        textAlign: 'center'
-                                                    }}
-                                                >
+                                                <button key={type.value} onClick={() => setProjectType(type.value)} className="cursor-target" style={{padding:'12px',background:projectType===type.value?'linear-gradient(135deg,#f4d03f,#e8f4f8)':'rgba(244,208,63,0.1)',border:`2px solid ${projectType===type.value?'#f4d03f':'rgba(244,208,63,0.3)'}`,borderRadius:'8px',color:projectType===type.value?'#0a1628':'#e8f4f8',fontFamily:'Orbitron,monospace',fontSize:'0.85rem',fontWeight:'700',cursor:'pointer',transition:'all 0.3s ease',textAlign:'center'}}>
                                                     {type.icon} {type.value.toUpperCase()}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
-
-                                    <div style={{marginBottom: '20px'}}>
-                                        <h5 style={{color: '#f4d03f', fontSize: '1rem', marginBottom: '15px', fontWeight: '700'}}>
-                                            REQUIREMENTS
-                                        </h5>
-                                        <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                                    <div style={{marginBottom:'20px'}}>
+                                        <h5 style={{color:'#f4d03f',fontSize:'1rem',marginBottom:'15px',fontWeight:'700'}}>REQUIREMENTS</h5>
+                                        <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
                                             {Object.keys(requirements).map(req => (
-                                                <label 
-                                                    key={req}
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '10px',
-                                                        padding: '10px',
-                                                        background: 'rgba(244, 208, 63, 0.05)',
-                                                        border: '1px solid rgba(244, 208, 63, 0.2)',
-                                                        borderRadius: '6px',
-                                                        cursor: 'pointer',
-                                                        transition: 'all 0.2s ease'
-                                                    }}
-                                                    className="cursor-target"
-                                                >
-                                                    <input 
-                                                        type="checkbox"
-                                                        checked={requirements[req]}
-                                                        onChange={(e) => setRequirements({...requirements, [req]: e.target.checked})}
-                                                        style={{
-                                                            width: '18px',
-                                                            height: '18px',
-                                                            accentColor: '#f4d03f',
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    />
-                                                    <span style={{color: '#e8f4f8', fontSize: '0.9rem', textTransform: 'uppercase', fontWeight: '600'}}>
-                                                        {req === 'realtime' && '⚡ Real-time Updates'}
-                                                        {req === 'auth' && '🔐 Authentication'}
-                                                        {req === 'payment' && '💳 Payment Integration'}
-                                                        {req === 'animation' && '✨ Advanced Animations'}
-                                                        {req === 'mobile' && '📱 Mobile App'}
-                                                        {req === 'seo' && '🔍 SEO Optimized'}
-                                                        {req === 'ai' && '🤖 AI Integration'}
-                                                        {req === 'notifications' && '🔔 Push Notifications'}
-                                                        {req === 'fileUpload' && '📁 File Upload'}
-                                                        {req === 'multiLanguage' && '🌍 Multi-Language'}
-                                                        {req === 'analytics' && '📊 Analytics'}
-                                                        {req === 'pwa' && '📲 Progressive Web App'}
-                                                    </span>
+                                                <label key={req} style={{display:'flex',alignItems:'center',gap:'10px',padding:'10px',background:'rgba(244,208,63,0.05)',border:'1px solid rgba(244,208,63,0.2)',borderRadius:'6px',cursor:'pointer',transition:'all 0.2s ease'}} className="cursor-target">
+                                                    <input type="checkbox" checked={requirements[req]} onChange={e => setRequirements({...requirements,[req]:e.target.checked})} style={{width:'18px',height:'18px',accentColor:'#f4d03f',cursor:'pointer'}} />
+                                                    <span style={{color:'#e8f4f8',fontSize:'0.9rem',textTransform:'uppercase',fontWeight:'600'}}>{reqLabels[req]}</span>
                                                 </label>
                                             ))}
                                         </div>
                                     </div>
-
-                                    <button
-                                        onClick={handleAnalyze}
-                                        disabled={!projectType || isAnalyzing}
-                                        className="cursor-target"
-                                        style={{
-                                            width: '100%',
-                                            padding: '15px',
-                                            background: isAnalyzing ? 'rgba(244, 208, 63, 0.3)' : 'linear-gradient(135deg, #f4d03f, #e8f4f8)',
-                                            border: '2px solid #f4d03f',
-                                            borderRadius: '10px',
-                                            color: '#0a1628',
-                                            fontFamily: 'Orbitron, monospace',
-                                            fontSize: '1rem',
-                                            fontWeight: '900',
-                                            cursor: isAnalyzing ? 'not-allowed' : 'pointer',
-                                            transition: 'all 0.3s ease',
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '2px'
-                                        }}
-                                    >
-                                        {isAnalyzing ? '🔄 ANALYZING...' : '🚀 GET RECOMMENDATION'}
+                                    <button onClick={handleAnalyze} disabled={!projectType||isAnalyzing} className="cursor-target" style={{width:'100%',padding:'15px',background:isAnalyzing?'rgba(244,208,63,0.3)':'linear-gradient(135deg,#f4d03f,#e8f4f8)',border:'2px solid #f4d03f',borderRadius:'10px',color:'#0a1628',fontFamily:'Orbitron,monospace',fontSize:'1rem',fontWeight:'900',cursor:isAnalyzing?'not-allowed':'pointer',transition:'all 0.3s ease',textTransform:'uppercase',letterSpacing:'2px'}}>
+                                        {isAnalyzing?'🔄 ANALYZING...':'🚀 GET RECOMMENDATION'}
                                     </button>
                                 </>
                             ) : (
-                                <div style={{animation: 'fadeIn 0.5s ease'}}>
-                                    <h5 style={{color: '#f4d03f', fontSize: '1.2rem', marginBottom: '15px', fontWeight: '900', textAlign: 'center'}}>
-                                        🎯 RECOMMENDED STACK
-                                    </h5>
-                                    
-                                    <div style={{background: 'rgba(244, 208, 63, 0.1)', border: '1px solid rgba(244, 208, 63, 0.3)', borderRadius: '10px', padding: '15px', marginBottom: '15px'}}>
-                                        {Object.entries(recommendation).filter(([key]) => key !== 'reason' && key !== 'extras').map(([key, value]) => (
-                                            <div key={key} style={{marginBottom: '12px'}}>
-                                                <div style={{color: '#f4d03f', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px'}}>
-                                                    {key}
-                                                </div>
-                                                <div style={{color: '#e8f4f8', fontSize: '0.9rem', fontWeight: '600'}}>
-                                                    {value}
-                                                </div>
+                                <div style={{animation:'fadeIn 0.5s ease'}}>
+                                    <h5 style={{color:'#f4d03f',fontSize:'1.2rem',marginBottom:'15px',fontWeight:'900',textAlign:'center'}}>🎯 RECOMMENDED STACK</h5>
+                                    <div style={{background:'rgba(244,208,63,0.1)',border:'1px solid rgba(244,208,63,0.3)',borderRadius:'10px',padding:'15px',marginBottom:'15px'}}>
+                                        {Object.entries(recommendation).filter(([k])=>k!=='reason'&&k!=='extras').map(([key,value])=>(
+                                            <div key={key} style={{marginBottom:'12px'}}>
+                                                <div style={{color:'#f4d03f',fontSize:'0.75rem',fontWeight:'700',textTransform:'uppercase',marginBottom:'4px'}}>{key}</div>
+                                                <div style={{color:'#e8f4f8',fontSize:'0.9rem',fontWeight:'600'}}>{value}</div>
                                             </div>
                                         ))}
                                     </div>
-
-                                    <div style={{background: 'rgba(232, 244, 248, 0.1)', border: '1px solid rgba(232, 244, 248, 0.3)', borderRadius: '10px', padding: '15px', marginBottom: '15px'}}>
-                                        <div style={{color: '#e8f4f8', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px'}}>
-                                            💡 WHY THIS STACK?
-                                        </div>
-                                        <div style={{color: '#e8f4f8', fontSize: '0.85rem', lineHeight: '1.6'}}>
-                                            {recommendation.reason}
-                                        </div>
+                                    <div style={{background:'rgba(232,244,248,0.1)',border:'1px solid rgba(232,244,248,0.3)',borderRadius:'10px',padding:'15px',marginBottom:'15px'}}>
+                                        <div style={{color:'#e8f4f8',fontSize:'0.75rem',fontWeight:'700',textTransform:'uppercase',marginBottom:'8px'}}>💡 WHY THIS STACK?</div>
+                                        <div style={{color:'#e8f4f8',fontSize:'0.85rem',lineHeight:'1.6'}}>{recommendation.reason}</div>
                                     </div>
-
-                                    <div style={{background: 'rgba(244, 208, 63, 0.05)', border: '1px solid rgba(244, 208, 63, 0.2)', borderRadius: '10px', padding: '15px', marginBottom: '15px'}}>
-                                        <div style={{color: '#f4d03f', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px'}}>
-                                            ⚙️ ADDITIONAL TOOLS
-                                        </div>
-                                        <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px'}}>
-                                            {recommendation.extras.map((extra, index) => (
-                                                <span 
-                                                    key={index}
-                                                    style={{
-                                                        padding: '6px 12px',
-                                                        background: 'rgba(244, 208, 63, 0.2)',
-                                                        border: '1px solid rgba(244, 208, 63, 0.4)',
-                                                        borderRadius: '20px',
-                                                        color: '#f4d03f',
-                                                        fontSize: '0.75rem',
-                                                        fontWeight: '700'
-                                                    }}
-                                                >
-                                                    {extra}
-                                                </span>
+                                    <div style={{background:'rgba(244,208,63,0.05)',border:'1px solid rgba(244,208,63,0.2)',borderRadius:'10px',padding:'15px',marginBottom:'15px'}}>
+                                        <div style={{color:'#f4d03f',fontSize:'0.75rem',fontWeight:'700',textTransform:'uppercase',marginBottom:'8px'}}>⚙️ ADDITIONAL TOOLS</div>
+                                        <div style={{display:'flex',flexWrap:'wrap',gap:'8px'}}>
+                                            {recommendation.extras.map((extra,i)=>(
+                                                <span key={i} style={{padding:'6px 12px',background:'rgba(244,208,63,0.2)',border:'1px solid rgba(244,208,63,0.4)',borderRadius:'20px',color:'#f4d03f',fontSize:'0.75rem',fontWeight:'700'}}>{extra}</span>
                                             ))}
                                         </div>
                                     </div>
-
-                                    <button
-                                        onClick={handleReset}
-                                        className="cursor-target"
-                                        style={{
-                                            width: '100%',
-                                            padding: '12px',
-                                            background: 'transparent',
-                                            border: '2px solid #f4d03f',
-                                            borderRadius: '8px',
-                                            color: '#f4d03f',
-                                            fontFamily: 'Orbitron, monospace',
-                                            fontSize: '0.9rem',
-                                            fontWeight: '700',
-                                            cursor: 'pointer',
-                                            transition: 'all 0.3s ease',
-                                            textTransform: 'uppercase'
-                                        }}
-                                    >
-                                        🔄 NEW RECOMMENDATION
-                                    </button>
+                                    <button onClick={handleReset} className="cursor-target" style={{width:'100%',padding:'12px',background:'transparent',border:'2px solid #f4d03f',borderRadius:'8px',color:'#f4d03f',fontFamily:'Orbitron,monospace',fontSize:'0.9rem',fontWeight:'700',cursor:'pointer',transition:'all 0.3s ease',textTransform:'uppercase'}}>🔄 NEW RECOMMENDATION</button>
                                 </div>
                             )}
                         </div>
@@ -2179,91 +1548,46 @@
             );
         };
 
-        // Main App Component
+        // ─── Main App ───
         const App = () => {
             useEffect(() => {
                 gsap.registerPlugin(ScrollTrigger);
 
-                // Scroll Animations
                 gsap.utils.toArray('.section-title').forEach(title => {
-                    gsap.fromTo(title, 
-                        { opacity: 0, y: 100 },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1,
-                            scrollTrigger: {
-                                trigger: title,
-                                start: 'top center',
-                                end: 'bottom center',
-                                scrub: true
-                            }
-                        }
-                    );
+                    gsap.fromTo(title, { opacity:0, y:100 }, { opacity:1, y:0, duration:1, scrollTrigger:{ trigger:title, start:'top center', end:'bottom center', scrub:true } });
                 });
 
                 gsap.utils.toArray('.project-card').forEach(card => {
-                    gsap.fromTo(card, 
-                        { opacity: 0, y: 50 },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1,
-                            scrollTrigger: {
-                                trigger: card,
-                                start: 'top center',
-                                end: 'bottom center',
-                                scrub: true
-                            }
-                        }
-                    );
+                    gsap.fromTo(card, { opacity:0, y:50 }, { opacity:1, y:0, duration:1, scrollTrigger:{ trigger:card, start:'top center', end:'bottom center', scrub:true } });
                 });
 
-                // Navbar hide/show on scroll
                 let lastScroll = 0;
                 const nav = document.querySelector('.nav-container');
-
                 const handleScroll = () => {
-                    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-                    if (currentScroll > lastScroll) {
-                        gsap.to(nav, {
-                            x: 150,
-                            duration: 0.5,
-                            ease: "power2.out"
-                        });
-                    } else {
-                        gsap.to(nav, {
-                            x: 0,
-                            duration: 0.5,
-                            ease: "power2.out"
-                        });
-                    }
-
-                    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+                    const cur = window.pageYOffset || document.documentElement.scrollTop;
+                    if (nav) gsap.to(nav, { x: cur > lastScroll ? 150 : 0, duration:0.5, ease:'power2.out' });
+                    lastScroll = cur <= 0 ? 0 : cur;
                 };
-
                 window.addEventListener('scroll', handleScroll);
-
-                return () => {
-                    window.removeEventListener('scroll', handleScroll);
-                };
+                return () => window.removeEventListener('scroll', handleScroll);
             }, []);
+
+            const touch = isTouchDevice();
 
             return (
                 <>
-                    <TargetCursor />
+                    {/* Custom cursor — only on desktop */}
+                    {!touch && <TargetCursor />}
+
                     <MatrixBackground />
 
-                    {/* HUD Interface */}
+                    {/* HUD */}
                     <div className="hud">
-                        <div className="hud-corner top-left"></div>
-                        <div className="hud-corner top-right"></div>
-                        <div className="hud-corner bottom-left"></div>
-                        <div className="hud-corner bottom-right"></div>
+                        <div className="hud-corner top-left" /><div className="hud-corner top-right" />
+                        <div className="hud-corner bottom-left" /><div className="hud-corner bottom-right" />
                     </div>
 
-                    {/* Navigation */}
+                    {/* Desktop side nav */}
                     <nav className="nav-container">
                         <a href="#home" className="nav-item">INIT</a>
                         <a href="#about" className="nav-item">PROFILE</a>
@@ -2272,7 +1596,7 @@
                         <a href="#contact" className="nav-item">CONNECT</a>
                     </nav>
 
-                    {/* Hero Section */}
+                    {/* Hero */}
                     <section id="home" className="hero">
                         <div className="hero-content">
                             <h1 className="glitch" data-text="RAJVANSH">RAJVANSH</h1>
@@ -2284,7 +1608,7 @@
                         </div>
                     </section>
 
-                    {/* About Section */}
+                    {/* About */}
                     <section id="about" className="section">
                         <div className="container">
                             <h2 className="section-title">System Profile</h2>
@@ -2295,18 +1619,12 @@
                                     <p>My interests include full-stack development, AI/ML applications, browser-based games, responsive design, and creating immersive digital experiences that combine creativity and technology.</p>
                                     <p>My mission: To design and build solutions that bring ideas to life, push the boundaries of conventional digital experiences, and continuously grow as a developer in the ever-evolving tech world.</p>
                                 </div>
-                                <ProfileCard 
-                                    avatarUrl="profile.jpg"
-                                    name="Rajvansh Rana"
-                                    title="Web Developer"
-                                    handle="rajvansh977"
-                                    status="Available for Work"
-                                />
+                                <ProfileCard avatarUrl="profile.jpg" name="Rajvansh Rana" title="Web Developer" handle="rajvansh977" status="Available for Work" />
                             </div>
                         </div>
                     </section>
 
-                    {/* Projects Section */}
+                    {/* Projects */}
                     <section id="projects" className="section">
                         <div className="container">
                             <h2 className="section-title">Digital Creations</h2>
@@ -2315,36 +1633,17 @@
                                     <div className="project-card">
                                         <div className="project-header">CYBER CORE</div>
                                         <div className="project-content">
-                                            <div className="project-visual">
-                                                <iframe src="https://rajvansh977.github.io/CYBER_CORE/"></iframe>
-                                            </div>
+                                            <div className="project-visual"><iframe src="https://rajvansh977.github.io/CYBER_CORE/"></iframe></div>
                                             <p className="project-description">CYBER CORE is a modern, visually engaging web project that combines a rotating 3D image slider with clean design aesthetics. Built with HTML, CSS, and JavaScript, it delivers a smooth and dynamic user experience.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">JavaScript</span>
-                                                <span className="tech-tag">HTML</span>
-                                                <span className="tech-tag">CSS</span>
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">JavaScript</span><span className="tech-tag">HTML</span><span className="tech-tag">CSS</span></div>
                                         </div>
                                     </div>
                                     <div className="project-card">
                                         <div className="project-header">site-de-cinema</div>
                                         <div className="project-content">
-                                            <div className="project-visual">
-                                                <img src="Site.png" alt="site-de-cinema" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                                
-                                                </div>
-                                            
+                                            <div className="project-visual"><img src="Site.png" alt="site-de-cinema" style={{width:'100%',height:'100%',objectFit:'cover'}} /></div>
                                             <p className="project-description">Site-de-Cinema is a movie discovery platform that lets users browse films, view detailed information, and manage reviews using a clean and responsive interface. The project includes user authentication (signup/login), dynamic movie data handling, and a structured API built with Node.js, Express, and MongoDB.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">GSAP JS</span>
-                                                <span className="tech-tag">MongoDB</span>
-                                                <span className="tech-tag">Node js</span>
-                                                <span className="tech-tag">Express js</span>
-                                                <span className="tech-tag">API</span>
-
-                                                
-
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">GSAP JS</span><span className="tech-tag">MongoDB</span><span className="tech-tag">Node js</span><span className="tech-tag">Express js</span><span className="tech-tag">API</span></div>
                                         </div>
                                     </div>
                                     <div className="project-card">
@@ -2352,11 +1651,7 @@
                                         <div className="project-content">
                                             <div className="project-visual">🌐</div>
                                             <p className="project-description">Immersive virtual reality environment with procedural world generation, AI-driven NPCs, and blockchain-based asset ownership system.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">WEBXR</span>
-                                                <span className="tech-tag">BLOCKCHAIN</span>
-                                                <span className="tech-tag">THREE.JS</span>
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">WEBXR</span><span className="tech-tag">BLOCKCHAIN</span><span className="tech-tag">THREE.JS</span></div>
                                         </div>
                                     </div>
                                     <div className="project-card">
@@ -2364,11 +1659,7 @@
                                         <div className="project-content">
                                             <div className="project-visual">🔮</div>
                                             <p className="project-description">Holographic user interface system with gesture recognition, spatial audio, and augmented reality integration for next-generation computing.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">HOLOGRAM</span>
-                                                <span className="tech-tag">GESTURE</span>
-                                                <span className="tech-tag">SPATIAL</span>
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">HOLOGRAM</span><span className="tech-tag">GESTURE</span><span className="tech-tag">SPATIAL</span></div>
                                         </div>
                                     </div>
                                     <div className="project-card">
@@ -2376,11 +1667,7 @@
                                         <div className="project-content">
                                             <div className="project-visual">👥</div>
                                             <p className="project-description">AI-powered digital avatar system that creates photorealistic human representations with advanced facial animation and emotion recognition.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">AI</span>
-                                                <span className="tech-tag">MOCAP</span>
-                                                <span className="tech-tag">DEEPFAKE</span>
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">AI</span><span className="tech-tag">MOCAP</span><span className="tech-tag">DEEPFAKE</span></div>
                                         </div>
                                     </div>
                                     <div className="project-card">
@@ -2388,11 +1675,7 @@
                                         <div className="project-content">
                                             <div className="project-visual">💻</div>
                                             <p className="project-description">Revolutionary operating system interface that runs entirely in the browser, featuring virtual desktops, AI assistants, and quantum processing capabilities.</p>
-                                            <div className="project-tech">
-                                                <span className="tech-tag">WEBASSEMBLY</span>
-                                                <span className="tech-tag">QUANTUM</span>
-                                                <span className="tech-tag">VIRTUAL</span>
-                                            </div>
+                                            <div className="project-tech"><span className="tech-tag">WEBASSEMBLY</span><span className="tech-tag">QUANTUM</span><span className="tech-tag">VIRTUAL</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -2400,310 +1683,54 @@
                         </div>
                     </section>
 
-                    {/* Skills Section */}
+                    {/* Skills */}
                     <section id="skills" className="section">
                         <div className="container">
                             <h2 className="section-title">Core Systems</h2>
                             <div className="skills-grid">
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">⚛️ FRONTEND</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">React</span>
-                                                <span className="skill-percent">90%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '90%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Next.js</span>
-                                                <span className="skill-percent">85%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '85%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">HTML/CSS</span>
-                                                <span className="skill-percent">95%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '95%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">JavaScript</span>
-                                                <span className="skill-percent">88%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '88%'}}></div>
-                                            </div>
+                                {[
+                                    { title:'⚛️ FRONTEND', skills:[['React','90'],['Next.js','85'],['HTML/CSS','95'],['JavaScript','88']] },
+                                    { title:'🔧 BACKEND', skills:[['Node.js','82'],['Express','80'],['REST API','85'],['Python','75']] },
+                                    { title:'💾 DATABASE', skills:[['MongoDB','85'],['MySQL','78'],['Firebase','80'],['Redis','70']] },
+                                    { title:'✨ ANIMATION', skills:[['GSAP','88'],['Framer Motion','82'],['Three.js','75'],['CSS Animations','90']] },
+                                    { title:'🛠️ TOOLS', skills:[['Git','90'],['VS Code','95'],['Webpack','75'],['NPM','88']] },
+                                    { title:'🤖 AI/ML', skills:[['Python','80'],['TensorFlow','70'],['PyTorch','68'],['Machine Learning','75']] }
+                                ].map(cat => (
+                                    <div key={cat.title} className="skill-category">
+                                        <h3 className="skill-category-title">{cat.title}</h3>
+                                        <div className="skill-bars">
+                                            {cat.skills.map(([name, pct]) => (
+                                                <div key={name} className="skill-item">
+                                                    <div className="skill-header"><span className="skill-name">{name}</span><span className="skill-percent">{pct}%</span></div>
+                                                    <div className="skill-bar-container"><div className="skill-bar" style={{width:pct+'%'}}></div></div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                </div>
-
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">🔧 BACKEND</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Node.js</span>
-                                                <span className="skill-percent">82%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '82%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Express</span>
-                                                <span className="skill-percent">80%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '80%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">REST API</span>
-                                                <span className="skill-percent">85%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '85%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Python</span>
-                                                <span className="skill-percent">75%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '75%'}}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">💾 DATABASE</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">MongoDB</span>
-                                                <span className="skill-percent">85%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '85%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">MySQL</span>
-                                                <span className="skill-percent">78%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '78%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Firebase</span>
-                                                <span className="skill-percent">80%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '80%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Redis</span>
-                                                <span className="skill-percent">70%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '70%'}}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">✨ ANIMATION</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">GSAP</span>
-                                                <span className="skill-percent">88%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '88%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Framer Motion</span>
-                                                <span className="skill-percent">82%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '82%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Three.js</span>
-                                                <span className="skill-percent">75%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '75%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">CSS Animations</span>
-                                                <span className="skill-percent">90%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '90%'}}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">🛠️ TOOLS</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Git</span>
-                                                <span className="skill-percent">90%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '90%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">VS Code</span>
-                                                <span className="skill-percent">95%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '95%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Webpack</span>
-                                                <span className="skill-percent">75%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '75%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">NPM</span>
-                                                <span className="skill-percent">88%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '88%'}}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="skill-category">
-                                    <h3 className="skill-category-title">🤖 AI/ML</h3>
-                                    <div className="skill-bars">
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Python</span>
-                                                <span className="skill-percent">80%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '80%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">TensorFlow</span>
-                                                <span className="skill-percent">70%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '70%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">PyTorch</span>
-                                                <span className="skill-percent">68%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '68%'}}></div>
-                                            </div>
-                                        </div>
-                                        <div className="skill-item">
-                                            <div className="skill-header">
-                                                <span className="skill-name">Machine Learning</span>
-                                                <span className="skill-percent">75%</span>
-                                            </div>
-                                            <div className="skill-bar-container">
-                                                <div className="skill-bar" style={{width: '75%'}}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </section>
 
-                    {/* AI Tech Stack Recommender */}
                     <AITechStack />
 
-                    {/* Contact Section */}
+                    {/* Contact */}
                     <section id="contact" className="section">
                         <div className="container">
                             <h2 className="section-title">Establish Connection</h2>
                             <div className="contact-container">
                                 <div className="contact-info">
-                                    <div className="contact-item">
-                                        <div className="contact-icon">📡</div>
-                                        <div>rajvansh@cybernet.sys</div>
-                                    </div>
-                                    <div className="contact-item">
-                                        <div className="contact-icon">🔗</div>
-                                        <div>linkedin.com/in/rajvansh</div>
-                                    </div>
-                                    <div className="contact-item">
-                                        <div className="contact-icon">🐙</div>
-                                        <div>github.com/rajvansh977</div>
-                                    </div>
-                                    <div className="contact-item">
-                                        <div className="contact-icon">🌍</div>
-                                        <div>India, Tech Hub</div>
-                                    </div>
+                                    <div className="contact-item"><div className="contact-icon">📡</div><div>rajvansh@cybernet.sys</div></div>
+                                    <div className="contact-item"><div className="contact-icon">🔗</div><div>linkedin.com/in/rajvansh</div></div>
+                                    <div className="contact-item"><div className="contact-icon">🐙</div><div>github.com/rajvansh977</div></div>
+                                    <div className="contact-item"><div className="contact-icon">🌍</div><div>India, Tech Hub</div></div>
                                 </div>
                                 <form className="terminal-form">
                                     <div className="terminal-header">[ SECURE TRANSMISSION PROTOCOL ]</div>
-                                    <div className="form-group">
-                                        <label htmlFor="name">USER_ID:</label>
-                                        <input type="text" id="name" name="name" required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="email">EMAIL_ADDR:</label>
-                                        <input type="email" id="email" name="email" required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="subject">SUBJECT:</label>
-                                        <input type="text" id="subject" name="subject" required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="message">MESSAGE_BODY:</label>
-                                        <textarea id="message" name="message" rows="5" required></textarea>
-                                    </div>
+                                    <div className="form-group"><label htmlFor="name">USER_ID:</label><input type="text" id="name" name="name" required /></div>
+                                    <div className="form-group"><label htmlFor="email">EMAIL_ADDR:</label><input type="email" id="email" name="email" required /></div>
+                                    <div className="form-group"><label htmlFor="subject">SUBJECT:</label><input type="text" id="subject" name="subject" required /></div>
+                                    <div className="form-group"><label htmlFor="message">MESSAGE_BODY:</label><textarea id="message" name="message" rows="5" required></textarea></div>
                                     <button type="submit" className="submit-btn">TRANSMIT DATA</button>
                                 </form>
                             </div>
