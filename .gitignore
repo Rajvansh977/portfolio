@@ -1,0 +1,12 @@
+# ── Root level ──────────────────────────────────────────
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.vscode/*.code-workspace
+*.suo
+*.user

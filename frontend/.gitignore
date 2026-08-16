@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # Logs
 logs
 *.log
@@ -22,3 +23,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+=======
+# ── Frontend (Vite + React) ───────────────────────────────
+node_modules/
+dist/
+dist-ssr/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Vite cache
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> Stashed changes
