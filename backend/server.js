@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import contactRoutes from './routes/contact.js';
+import chatRoutes from './routes/chat.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // ── Routes ──────────────────────────────────────────────────
 app.use('/api/contact', contactRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected' });

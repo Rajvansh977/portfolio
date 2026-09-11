@@ -456,7 +456,7 @@ export default function SkillsUniverse() {
 
     const scene  = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, W / H, 0.1, 300);
-    camera.position.set(0, 12, 42);
+    camera.position.set(0, 8, 28);
     camera.lookAt(0, 0, 0);
 
     const ndc       = new THREE.Vector2(-9999, -9999);
@@ -604,7 +604,7 @@ export default function SkillsUniverse() {
       camTarget.x += (camTarget.cx * 8 - camTarget.x) * 0.04;
       camTarget.y += (camTarget.cy * 5 - camTarget.y) * 0.04;
       camera.position.x = camTarget.x;
-      camera.position.y = 12 - camTarget.y;
+      camera.position.y = 8 - camTarget.y;
       camera.lookAt(0, 0, 0);
 
       star.rotation.y += 0.003;
@@ -664,12 +664,14 @@ export default function SkillsUniverse() {
         />
       )}
 
-      {/* Lab room overlay — only after wormhole finishes */}
-      {active !== null && wormhole === null && (
-        <LabRoom data={SKILL_DATA[active]} onClose={handleClose} />
+      {/* Lab room — keep mounted during exit wormhole so no flash */}
+      {active !== null && (
+        <div style={{ visibility: wormhole && wormhole.reverse ? 'hidden' : 'visible' }}>
+          <LabRoom data={SKILL_DATA[active]} onClose={handleClose} />
+        </div>
       )}
 
-      <div style={{ position: 'relative', width: '100%', height: '800px' }}>
+      <div style={{ position: 'relative', width: '100%', height: 'min(900px, 100vw)' }}>
         <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
         <div className="skills-hint">CLICK A PLANET TO ENTER ITS LAB</div>
         <div className="skills-legend">

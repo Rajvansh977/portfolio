@@ -8,11 +8,15 @@ import {
   Zap, ExternalLink, ArrowRight, Loader2,
   ChevronDown, Layers, Database, Wand2, Wrench, Bot,
   User, Code, BookOpen, Clock, CheckSquare, Infinity,
+  Volume2, VolumeX,
 } from 'lucide-react';
 import ContactForm from './components/ContactForm.jsx';
 import HeroScene from './components/HeroScene.jsx';
 import JourneyOrb from './components/JourneyOrb.jsx';
 import SkillsUniverse from './components/SkillsUniverse.jsx';
+import FloatingLogos from './components/FloatingLogos.jsx';
+import ChatBot from './components/ChatBot.jsx';
+import Loader from './components/Loader.jsx';
 import './App.css';
 
 // Smooth scroll helper — uses Lenis if available
@@ -693,9 +697,84 @@ const MobileNav = () => {
   );
 };
 
+// ── Site entry flash — white fades to transparent after wormhole ──
+const SiteFlash = () => {
+  const [opacity, setOpacity] = useState(1);
+  useEffect(() => {
+    // Start fade after one paint
+    const t = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setOpacity(0));
+    });
+    return () => cancelAnimationFrame(t);
+  }, []);
+  if (opacity === 0) return null;
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 99998,
+      background: '#fff',
+      opacity,
+      transition: 'opacity 1.4s ease',
+      pointerEvents: 'none',
+    }} />
+  );
+};
+
 // ── Main App ───────────────────────────────────────────────────
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [loaded,  setLoaded]  = useState(false);
+  const [muted, setMuted] = useState(false);
+  const audioRef = useRef(null);
+
+  // Create the bg audio element once, up front, so Loader can start it
+  useEffect(() => {
+    const audio = new Audio('/universfield-ambient-space-background-350710.mp3');
+    audio.loop = true;
+    audio.volume = 0;
+    audioRef.current = audio;
+    return () => { audio.pause(); };
+  }, []);
+
+  // After loader finishes, audio is already playing (started by Loader's click)
+  // Just ensure volume is at target if it wasn't faded in yet
+  useEffect(() => {
+    if (!loaded) return;
+    const audio = audioRef.current;
+    if (!audio) return;
+    // If somehow not playing yet, start on next interaction
+    if (audio.paused) {
+      const start = () => {
+        audio.play().then(() => {
+          let vol = 0;
+          const fade = setInterval(() => {
+            vol = Math.min(vol + 0.01, 0.35);
+            audio.volume = vol;
+            if (vol >= 0.35) clearInterval(fade);
+          }, 90);
+        }).catch(() => {});
+        window.removeEventListener('click', start);
+        window.removeEventListener('keydown', start);
+      };
+      window.addEventListener('click', start);
+      window.addEventListener('keydown', start);
+      return () => {
+        window.removeEventListener('click', start);
+        window.removeEventListener('keydown', start);
+      };
+    }
+  }, [loaded]);
+
+  const toggleMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (muted) {
+      audio.volume = 0.35;
+      setMuted(false);
+    } else {
+      audio.volume = 0;
+      setMuted(true);
+    }
+  };
 
   // Active nav highlight on scroll
   useEffect(() => {
@@ -744,7 +823,12 @@ export default function App() {
 
   return (
     <div className="scanlines">
-      {!touch && <TargetCursor />}
+      {!loaded && <Loader onDone={() => { setLoaded(true); }} bgAudioRef={audioRef} />}
+      {/* White flash fades out as site reveals after wormhole dive */}
+      {loaded && (
+        <SiteFlash />
+      )}
+      {loaded && !touch && <TargetCursor />}
       <MobileNav />
       <MatrixBackground />
 
@@ -765,9 +849,37 @@ export default function App() {
         <a href="https://github.com/rajvansh977" target="_blank" rel="noopener noreferrer" className="nav-item nav-github"><GitBranch size={13}/></a>
       </nav>
 
+      {/* Mute button — fixed bottom-right */}
+      <button
+        onClick={toggleMute}
+        title={muted ? 'Unmute' : 'Mute'}
+        style={{
+          position: 'fixed',
+          bottom: '28px',
+          left: '28px',
+          zIndex: 9000,
+          width: '38px',
+          height: '38px',
+          borderRadius: '50%',
+          background: 'rgba(10,22,40,0.85)',
+          border: '1px solid rgba(244,208,63,0.35)',
+          color: muted ? 'rgba(244,208,63,0.35)' : '#f4d03f',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          backdropFilter: 'blur(8px)',
+          boxShadow: muted ? 'none' : '0 0 10px rgba(244,208,63,0.2)',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+      </button>
+
       {/* ── HERO ── */}
       <section id="home" className="hero">
         <HeroScene />
+        <FloatingLogos />
         <div className="hero-content">
           <h1 className="glitch" data-text="RAJVANSH">RAJVANSH</h1>
           <TypedRoles />
@@ -989,7 +1101,7 @@ export default function App() {
         </div>
       </section>
 
-      <AITechStack />
+      <ChatBot />
 
       {/* ── CONTACT ── */}
       <section id="contact" className="section">
