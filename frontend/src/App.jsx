@@ -473,26 +473,26 @@ const ProfileCard = ({ avatarUrl, name, title, handle, status }) => {
 const Journey = () => {
   const education = [
     {
-      year: '2023',
+      year: '2022',
       label: 'Present',
       title: 'B.Sc. Information Technology',
-      org: 'Panjab University · Ludhiana',
+      org: 'GNDU, GGNIIVS · Punjab',
       desc: 'Web technologies, databases, AI/ML, and software engineering — built alongside real projects.',
       current: true,
     },
     {
-      year: '2021',
-      label: '2023',
+      year: '2020',
+      label: '2022',
       title: 'Senior Secondary (12th)',
-      org: 'HVM Convent Sen. Sec. School · Ludhiana',
-      desc: 'Science stream. Where curiosity about programming first sparked.',
+      org: 'HVM Convent School · Punjab',
+      desc: 'Commerce stream. Where curiosity about technology and problem-solving first sparked.',
       current: false,
     },
     {
-      year: '2019',
-      label: '2021',
+      year: '2018',
+      label: '2020',
       title: 'Secondary (10th)',
-      org: 'HVM Convent Sen. Sec. School · Ludhiana',
+      org: 'HVM Convent School · Punjab',
       desc: 'Strong foundation in Mathematics and Science.',
       current: false,
     },
@@ -502,10 +502,18 @@ const Journey = () => {
     {
       year: '2026',
       label: 'Present',
-      title: 'Full-Stack Developer Intern',
-      org: 'Currently Working',
-      desc: 'Shipping production MERN features. Learning what it means to build at scale.',
+      title: 'Full-Stack Web Development Intern',
+      org: 'Star Publicity',
+      desc: 'Building full-stack web apps with MERN, Vite, and Supabase. Integrating Three.js, WebGL, and GSAP for interactive 3D browser experiences.',
       current: true,
+    },
+    {
+      year: '2025',
+      label: '2025',
+      title: 'Web Developer & Team Leader',
+      org: 'Growvinci · June – September 2025',
+      desc: 'Led cross-functional teams, built WordPress e-commerce sites with custom themes, PHP templates, and converted client requirements into functional web solutions.',
+      current: false,
     },
     {
       year: '2024',
@@ -514,14 +522,6 @@ const Journey = () => {
       org: 'Self-employed',
       desc: 'End-to-end client projects — WordPress, MERN, GSAP animations.',
       current: true,
-    },
-    {
-      year: '2024',
-      label: '2025',
-      title: 'Open Source Projects',
-      org: 'github.com/rajvansh977',
-      desc: 'CYBER CORE and Site-de-Cinema — shipped, public, and used.',
-      current: false,
     },
   ];
 
@@ -884,7 +884,7 @@ export default function App() {
           <h1 className="glitch" data-text="RAJVANSH">RAJVANSH</h1>
           <TypedRoles />
           <div className="terminal-lines">
-            <div className="terminal-line">&gt; B.Sc. IT Student @ Mumbai University</div>
+            <div className="terminal-line">&gt; B.Sc. IT Student @ GNDU, GGNIIVS, Punjab</div>
             <div className="terminal-line">&gt; MERN Stack · GSAP · AI/ML</div>
             <div className="terminal-line">&gt; Building the future, one commit at a time_</div>
           </div>
@@ -893,6 +893,14 @@ export default function App() {
               VIEW PROJECTS
             </button>
             <a href="#contact" className="cta-button cta-outline" onClick={e => { e.preventDefault(); scrollTo('contact'); }}>HIRE ME</a>
+            <a
+              href="/resume.pdf"
+              download="Rajvansh_Rana_Resume.pdf"
+              className="cta-button cta-outline"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <FileText size={15} /> RESUME
+            </a>
           </div>
         </div>
         <div className="hero-scroll-indicator">
@@ -955,9 +963,9 @@ export default function App() {
           {/* Bottom info bar */}
           <div className="sp-info-bar reveal-item">
             {[
-              { icon: <GraduationCap size={22}/>, label: 'EDUCATION',    value: 'B.Sc. IT (In Progress)\nLudhiana, India' },
-              { icon: <MapPin size={22}/>,        label: 'LOCATION',     value: 'Ludhiana, India' },
-              { icon: <Briefcase size={22}/>,     label: 'EXPERIENCE',   value: 'Full-Stack Developer\nIntern · Currently Working' },
+              { icon: <GraduationCap size={22}/>, label: 'EDUCATION',    value: 'B.Sc. IT · GNDU\nGGNIIVS, Punjab' },
+              { icon: <MapPin size={22}/>,        label: 'LOCATION',     value: 'Punjab, India' },
+              { icon: <Briefcase size={22}/>,     label: 'EXPERIENCE',   value: 'Full-Stack Intern\nStar Publicity · Now' },
               { icon: <Clock size={22}/>,         label: 'AVAILABILITY', value: 'Open to\nOpportunities' },
               { icon: <Globe size={22}/>,         label: 'LANGUAGES',    value: 'English, Hindi,\nPunjabi' },
             ].map((item, i) => (

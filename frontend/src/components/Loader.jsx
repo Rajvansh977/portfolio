@@ -477,6 +477,31 @@ export default function Loader({ onDone, bgAudioRef }) {
         </div>
       </div>
 
+      {/* Skip button — only visible after narration starts */}
+      {started && hudVisible && (
+        <button
+          onClick={() => finishRef.current()}
+          style={{
+            position: 'absolute', zIndex: 5,
+            top: '28px', right: '36px',
+            background: 'rgba(10,22,40,0.7)',
+            border: '1px solid rgba(244,208,63,0.35)',
+            color: 'rgba(244,208,63,0.7)',
+            fontFamily: 'Orbitron, monospace',
+            fontSize: '0.65rem', fontWeight: '700',
+            letterSpacing: '3px', textTransform: 'uppercase',
+            padding: '8px 18px', borderRadius: '20px',
+            cursor: 'pointer',
+            backdropFilter: 'blur(8px)',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={e => { e.target.style.color = '#f4d03f'; e.target.style.borderColor = 'rgba(244,208,63,0.7)'; e.target.style.background = 'rgba(10,22,40,0.9)'; }}
+          onMouseLeave={e => { e.target.style.color = 'rgba(244,208,63,0.7)'; e.target.style.borderColor = 'rgba(244,208,63,0.35)'; e.target.style.background = 'rgba(10,22,40,0.7)'; }}
+        >
+          SKIP ›
+        </button>
+      )}
+
       {/* Bottom HUD */}
       {started && hudVisible && (
         <div style={{

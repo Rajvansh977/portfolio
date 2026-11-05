@@ -6,6 +6,7 @@ const TOTAL_DURATION = 16.7;   // seconds — full clip length
 const HALF           = TOTAL_DURATION / 2; // 8.35s per half
 
 // ── Procedural SFX ────────────────────────────────────────────
+// Returns a stop() function to kill audio immediately
 function playWormholeSound(reverse = false) {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -57,23 +58,42 @@ function playWormholeSound(reverse = false) {
     noise.start(now);  noise.stop(now + dur);
     rumble.start(now); rumble.stop(now + dur);
     setTimeout(() => ctx.close(), (dur + 0.3) * 1000);
-  } catch(e) {}
+
+    // Return stop function — ramps volume to 0 in 80ms then closes context
+    return () => {
+      try {
+        const stopNow = ctx.currentTime;
+        master.gain.cancelScheduledValues(stopNow);
+        master.gain.setValueAtTime(master.gain.value, stopNow);
+        master.gain.linearRampToValueAtTime(0, stopNow + 0.08);
+        setTimeout(() => { try { ctx.close(); } catch(_) {} }, 150);
+      } catch(_) {}
+    };
+  } catch(e) {
+    return () => {}; // no-op if audio failed
+  }
 }
 
 // ── Wormhole Component ────────────────────────────────────────
 export default function Wormhole({ color = '#f4d03f', reverse = false, onDone }) {
-  const mountRef = useRef(null);
+  const mountRef  = useRef(null);
+  const exitRef   = useRef(null); // call to skip immediately
+  const stopSfxRef = useRef(null); // call to stop SFX immediately
+
+  const handleSkip = () => {
+    if (stopSfxRef.current) stopSfxRef.current();
+    if (exitRef.current) exitRef.current();
+  };
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
 
-    playWormholeSound(reverse);
+    stopSfxRef.current = playWormholeSound(reverse);
 
     const W = window.innerWidth;
     const H = window.innerHeight;
 
-    // ── Renderer ──────────────────────────────────────────────
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(W, H);
@@ -81,22 +101,19 @@ export default function Wormhole({ color = '#f4d03f', reverse = false, onDone })
     renderer.setAnimationLoop(null);
     mount.appendChild(renderer.domElement);
 
-    // ── Scene / Camera ─────────────────────────────────────────
     const scene  = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
     const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 1000);
     camera.position.set(0, 0, 12);
 
-    // ── Lighting ───────────────────────────────────────────────
     scene.add(new THREE.AmbientLight(0xffffff, 1.5));
     const pt = new THREE.PointLight(0xffffff, 2, 50);
     pt.position.set(0, 0, 5);
     scene.add(pt);
 
-    // ── Safety timeout ─────────────────────────────────────────
-    const safetyTimer = setTimeout(() => {
-      cleanup(); onDone();
-    }, (HALF + 1) * 1000);
+    let doneOnce = false;
+    const safetyTimer = setTimeout(() => { cleanup(); finish(); }, (HALF + 1) * 1000);
+    let halfTimer = null;
 
     let mixer = null;
     let animId = null;
@@ -104,90 +121,74 @@ export default function Wormhole({ color = '#f4d03f', reverse = false, onDone })
 
     const cleanup = () => {
       clearTimeout(safetyTimer);
+      if (halfTimer) clearTimeout(halfTimer);
       if (animId) cancelAnimationFrame(animId);
       renderer.setAnimationLoop(null);
       renderer.dispose();
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
     };
 
-    // ── Load GLB ───────────────────────────────────────────────
+    const finish = () => {
+      if (doneOnce) return;
+      doneOnce = true;
+      if (stopSfxRef.current) { stopSfxRef.current(); stopSfxRef.current = null; }
+      cleanup();
+      onDone();
+    };
+
+    // Expose skip
+    exitRef.current = finish;
+
     const loader = new GLTFLoader();
     loader.load(
       '/wormhole.glb',
       (gltf) => {
         scene.add(gltf.scene);
 
-        // ── Step 1: compute bounding box at rest pose ─────────
         const box    = new THREE.Box3().setFromObject(gltf.scene);
         const center = box.getCenter(new THREE.Vector3());
         const size   = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
 
-        // ── Step 2: translate model so its center is at origin ─
         gltf.scene.position.sub(center);
+        gltf.scene.scale.setScalar(20 / maxDim);
 
-        // ── Step 3: scale to fill screen ──────────────────────
-        const scale = 20 / maxDim;
-        gltf.scene.scale.setScalar(scale);
-
-        // ── Step 4: camera always looks at world origin ────────
         camera.position.set(0, 0, 14);
         camera.lookAt(0, 0, 0);
         pt.position.set(0, 0, 14);
 
-        // ── Animation setup ──────────────────────────────────
         mixer = new THREE.AnimationMixer(gltf.scene);
 
         if (gltf.animations && gltf.animations.length > 0) {
-          const clip   = gltf.animations[0]; // "Take 001"
+          const clip   = gltf.animations[0];
           const action = mixer.clipAction(clip);
 
           action.clampWhenFinished = true;
           action.loop = THREE.LoopOnce;
 
           if (reverse) {
-            // Play second half: start from HALF
-            action.time      = HALF;
-            action.timeScale = 1;
+            action.time = HALF; action.timeScale = 1;
           } else {
-            // Play first half: start from 0
-            action.time      = 0;
-            action.timeScale = 1;
+            action.time = 0; action.timeScale = 1;
           }
 
           action.play();
-
-          // Force mixer to evaluate at start frame
           mixer.update(0);
-          // Camera always at origin — model was translated there
 
-          const halfDuration = HALF * 1000;
-
-          // After HALF seconds, we're done
-          setTimeout(() => {
-            cleanup();
-            onDone();
-          }, halfDuration - 100);
+          halfTimer = setTimeout(finish, (HALF - 0.1) * 1000);
         } else {
-          // No animations — just show for 1.5s
-          setTimeout(() => { cleanup(); onDone(); }, 1500);
+          halfTimer = setTimeout(finish, 1500);
         }
 
-        // ── Render loop ───────────────────────────────────────
         const tick = () => {
           animId = requestAnimationFrame(tick);
-          const delta = clock.getDelta();
-          if (mixer) mixer.update(delta);
+          if (mixer) mixer.update(clock.getDelta());
           renderer.render(scene, camera);
         };
         tick();
       },
       undefined,
-      (err) => {
-        console.error('GLB load error:', err);
-        cleanup();
-        onDone();
-      }
+      (err) => { console.error('GLB load error:', err); finish(); }
     );
 
     const onResize = () => {
@@ -204,14 +205,30 @@ export default function Wormhole({ color = '#f4d03f', reverse = false, onDone })
   }, []);
 
   return (
-    <div
-      ref={mountRef}
-      style={{
-        position: 'fixed', inset: 0,
-        zIndex: 99999,
-        pointerEvents: 'none',
-        background: '#000',
-      }}
-    />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: '#000' }}>
+      <div ref={mountRef} style={{ position: 'absolute', inset: 0 }} />
+      {/* Skip button */}
+      <button
+        onClick={handleSkip}
+        style={{
+          position: 'absolute', top: '28px', right: '36px', zIndex: 1,
+          background: 'rgba(0,0,0,0.6)',
+          border: `1px solid ${color}55`,
+          color: `${color}aa`,
+          fontFamily: 'Orbitron, monospace',
+          fontSize: '0.65rem', fontWeight: '700',
+          letterSpacing: '3px', textTransform: 'uppercase',
+          padding: '8px 18px', borderRadius: '20px',
+          cursor: 'pointer',
+          backdropFilter: 'blur(8px)',
+          transition: 'all 0.2s ease',
+          pointerEvents: 'all',
+        }}
+        onMouseEnter={e => { e.target.style.color = color; e.target.style.borderColor = color; }}
+        onMouseLeave={e => { e.target.style.color = `${color}aa`; e.target.style.borderColor = `${color}55`; }}
+      >
+        SKIP ›
+      </button>
+    </div>
   );
 }

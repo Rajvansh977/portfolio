@@ -4,7 +4,7 @@ import Wormhole from './Wormhole.jsx';
 
 const SKILL_DATA = [
   {
-    label: 'FRONTEND', color: 0x61dafb, emissive: 0x1a6b7a, size: 1.1, orbitR: 6.5, speed: 0.004, angle: 0,
+    label: 'FRONTEND', color: 0x61dafb, emissive: 0x1a6b7a, size: 2.2, orbitR: 7.0, speed: 0.004, angle: 0,
     icon: '⚛', desc: 'Building what users see and interact with. Fast, responsive, beautiful interfaces.',
     skills: [
       { name: 'React', level: 90, logo: 'react',
@@ -26,7 +26,7 @@ const SKILL_DATA = [
     ],
   },
   {
-    label: 'BACKEND', color: 0x68d391, emissive: 0x1a4731, size: 1.0, orbitR: 9.0, speed: 0.003, angle: 1.2,
+    label: 'BACKEND', color: 0x68d391, emissive: 0x1a4731, size: 2.0, orbitR: 10.5, speed: 0.003, angle: 1.2,
     icon: '⚙', desc: 'The engine behind the scenes. Servers, APIs, logic, and data flow.',
     skills: [
       { name: 'Node.js', level: 82, logo: 'nodedotjs',
@@ -48,7 +48,7 @@ const SKILL_DATA = [
     ],
   },
   {
-    label: 'DATABASE', color: 0xf6ad55, emissive: 0x7a3f00, size: 0.9, orbitR: 11.5, speed: 0.0025, angle: 2.4,
+    label: 'DATABASE', color: 0xf6ad55, emissive: 0x7a3f00, size: 1.8, orbitR: 13.5, speed: 0.0025, angle: 2.4,
     icon: '🗄', desc: 'Storing, querying, and managing data efficiently.',
     skills: [
       { name: 'MongoDB', level: 85, logo: 'mongodb',
@@ -70,7 +70,7 @@ const SKILL_DATA = [
     ],
   },
   {
-    label: 'ANIMATION', color: 0xf4d03f, emissive: 0x6b5a00, size: 1.0, orbitR: 14.0, speed: 0.002, angle: 3.6,
+    label: 'ANIMATION', color: 0xf4d03f, emissive: 0x6b5a00, size: 2.0, orbitR: 17.0, speed: 0.002, angle: 3.6,
     icon: '✨', desc: 'Making the web feel alive. Motion that guides and delights.',
     skills: [
       { name: 'GSAP', level: 88, logo: 'greensock',
@@ -92,7 +92,7 @@ const SKILL_DATA = [
     ],
   },
   {
-    label: 'TOOLS', color: 0xa78bfa, emissive: 0x3b1f7a, size: 0.85, orbitR: 17.0, speed: 0.0018, angle: 4.8,
+    label: 'TOOLS', color: 0xa78bfa, emissive: 0x3b1f7a, size: 1.7, orbitR: 20.5, speed: 0.0018, angle: 4.8,
     icon: '🛠', desc: 'The developer toolkit. Everything needed to build, test, and ship.',
     skills: [
       { name: 'Git', level: 90, logo: 'git',
@@ -114,7 +114,7 @@ const SKILL_DATA = [
     ],
   },
   {
-    label: 'AI / ML', color: 0xfc8181, emissive: 0x7a1f1f, size: 0.95, orbitR: 20.0, speed: 0.0015, angle: 0.6,
+    label: 'AI / ML', color: 0xfc8181, emissive: 0x7a1f1f, size: 1.9, orbitR: 24.0, speed: 0.0015, angle: 0.6,
     icon: '🤖', desc: 'Exploring machine intelligence. Teaching machines to learn.',
     skills: [
       { name: 'Python', level: 80, logo: 'python',
@@ -191,6 +191,10 @@ function LabRoom({ data, onClose }) {
     setTimeout(onClose, 400);
   };
 
+  const skipBoot = () => {
+    setBooted(true);
+  };
+
   return (
     <div className={`lab-overlay ${visible ? 'lab-visible' : ''}`}
       style={{ '--hex': hex, '--hex20': hex20, '--hex40': hex40, '--hex80': hex80 }}>
@@ -227,10 +231,31 @@ function LabRoom({ data, onClose }) {
 
       {/* Boot sequence */}
       {!booted && (
-        <div className="lab-boot">
+        <div className="lab-boot" style={{ position: 'relative' }}>
           <pre className="lab-boot-text" style={{ color: hex }}>
             {bootText}<span className="lab-cursor">█</span>
           </pre>
+          {/* Skip boot */}
+          <button
+            onClick={skipBoot}
+            style={{
+              position: 'absolute', bottom: '40px', right: '40px',
+              background: 'rgba(0,0,0,0.6)',
+              border: `1px solid ${hex}55`,
+              color: `${hex}99`,
+              fontFamily: 'Orbitron, monospace',
+              fontSize: '0.65rem', fontWeight: '700',
+              letterSpacing: '3px', textTransform: 'uppercase',
+              padding: '8px 18px', borderRadius: '20px',
+              cursor: 'pointer',
+              backdropFilter: 'blur(8px)',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => { e.target.style.color = hex; e.target.style.borderColor = hex; }}
+            onMouseLeave={e => { e.target.style.color = `${hex}99`; e.target.style.borderColor = `${hex}55`; }}
+          >
+            SKIP ›
+          </button>
         </div>
       )}
 
@@ -346,7 +371,6 @@ function LabRoom({ data, onClose }) {
                 <button className="skill-modal-close" style={{ borderColor: hex40, color: hex }} onClick={closeSkill}>
                   ✕ CLOSE
                 </button>
-
                 <div className="skill-modal-inner">
                   {/* Header */}
                   <div className="skill-modal-header">
@@ -455,8 +479,8 @@ export default function SkillsUniverse() {
     mount.appendChild(renderer.domElement);
 
     const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, W / H, 0.1, 300);
-    camera.position.set(0, 8, 28);
+    const camera = new THREE.PerspectiveCamera(65, W / H, 0.1, 400);
+    camera.position.set(0, 12, 38);
     camera.lookAt(0, 0, 0);
 
     const ndc       = new THREE.Vector2(-9999, -9999);
@@ -473,21 +497,21 @@ export default function SkillsUniverse() {
     mount.addEventListener('mousemove', onMouseMove);
 
     // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    const sunLight = new THREE.PointLight(0xf4d03f, 5, 60);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    const sunLight = new THREE.PointLight(0xf4d03f, 8, 120);
     scene.add(sunLight);
 
     // Central star
     const starMat = new THREE.MeshStandardMaterial({
       color: 0xfff0b3, emissive: new THREE.Color(0xf4d03f),
-      emissiveIntensity: 1.5, roughness: 0.1, metalness: 0.2,
+      emissiveIntensity: 2.0, roughness: 0.1, metalness: 0.2,
     });
-    const star = new THREE.Mesh(new THREE.SphereGeometry(1.8, 48, 48), starMat);
+    const star = new THREE.Mesh(new THREE.SphereGeometry(3.2, 64, 64), starMat);
     scene.add(star);
-    [2.6, 3.4, 4.4].forEach((r, i) => {
+    [4.4, 5.6, 7.0].forEach((r, i) => {
       const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(r, 0.025, 8, 100),
-        new THREE.MeshBasicMaterial({ color: 0xf4d03f, transparent: true, opacity: 0.18 - i * 0.05 })
+        new THREE.TorusGeometry(r, 0.045, 8, 120),
+        new THREE.MeshBasicMaterial({ color: 0xf4d03f, transparent: true, opacity: 0.22 - i * 0.06 })
       );
       ring.rotation.x = Math.PI / 2 + i * 0.4;
       scene.add(ring);
@@ -516,22 +540,22 @@ export default function SkillsUniverse() {
 
       // Hitbox
       planet.add(new THREE.Mesh(
-        new THREE.SphereGeometry(cat.size * 2.5, 8, 8),
+        new THREE.SphereGeometry(cat.size * 2.0, 8, 8),
         new THREE.MeshBasicMaterial({ visible: false })
       ));
 
       // Atmosphere
       const atmMat = new THREE.MeshBasicMaterial({
-        color: cat.color, transparent: true, opacity: 0.08, side: THREE.BackSide,
+        color: cat.color, transparent: true, opacity: 0.10, side: THREE.BackSide,
       });
-      planet.add(new THREE.Mesh(new THREE.SphereGeometry(cat.size * 1.5, 16, 16), atmMat));
+      planet.add(new THREE.Mesh(new THREE.SphereGeometry(cat.size * 1.6, 32, 32), atmMat));
       planet.userData.atmMat = atmMat;
       planet.userData.planetMat = planetMat;
 
       if (idx % 2 === 0) {
         const ring = new THREE.Mesh(
-          new THREE.TorusGeometry(cat.size * 2.0, 0.035, 4, 60),
-          new THREE.MeshBasicMaterial({ color: cat.color, transparent: true, opacity: 0.3 })
+          new THREE.TorusGeometry(cat.size * 2.2, 0.06, 6, 80),
+          new THREE.MeshBasicMaterial({ color: cat.color, transparent: true, opacity: 0.4 })
         );
         ring.rotation.x = Math.PI / 2.8;
         planet.add(ring);
@@ -539,17 +563,17 @@ export default function SkillsUniverse() {
 
       // Label
       const cv = document.createElement('canvas');
-      cv.width = 320; cv.height = 80;
+      cv.width = 512; cv.height = 128;
       const cx2 = cv.getContext('2d');
-      cx2.font = 'bold 22px monospace';
+      cx2.font = 'bold 36px monospace';
       cx2.fillStyle = '#' + cat.color.toString(16).padStart(6, '0');
       cx2.textAlign = 'center';
       cx2.shadowColor = cx2.fillStyle;
-      cx2.shadowBlur = 10;
-      cx2.fillText(cat.label, 160, 50);
+      cx2.shadowBlur = 18;
+      cx2.fillText(cat.label, 256, 80);
       const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), transparent: true }));
-      sp.scale.set(2.8, 0.7, 1);
-      sp.position.y = cat.size + 0.9;
+      sp.scale.set(5.0, 1.25, 1);
+      sp.position.y = cat.size + 1.6;
       planet.add(sp);
 
       scene.add(planet);
@@ -576,14 +600,14 @@ export default function SkillsUniverse() {
     const STARS = 1200;
     const sPts = new Float32Array(STARS * 3);
     for (let i = 0; i < STARS; i++) {
-      sPts[i*3]   = (Math.random() - 0.5) * 80;
-      sPts[i*3+1] = (Math.random() - 0.5) * 50;
-      sPts[i*3+2] = (Math.random() - 0.5) * 80;
+      sPts[i*3]   = (Math.random() - 0.5) * 140;
+      sPts[i*3+1] = (Math.random() - 0.5) * 90;
+      sPts[i*3+2] = (Math.random() - 0.5) * 140;
     }
     const sGeo = new THREE.BufferGeometry();
     sGeo.setAttribute('position', new THREE.BufferAttribute(sPts, 3));
     scene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({
-      size: 0.07, color: 0xffffff, transparent: true, opacity: 0.4,
+      size: 0.12, color: 0xffffff, transparent: true, opacity: 0.5,
       blending: THREE.AdditiveBlending, depthWrite: false,
     })));
 
@@ -601,15 +625,15 @@ export default function SkillsUniverse() {
       animId = requestAnimationFrame(animate);
       frame += 0.008;
 
-      camTarget.x += (camTarget.cx * 8 - camTarget.x) * 0.04;
-      camTarget.y += (camTarget.cy * 5 - camTarget.y) * 0.04;
+      camTarget.x += (camTarget.cx * 10 - camTarget.x) * 0.04;
+      camTarget.y += (camTarget.cy * 6  - camTarget.y) * 0.04;
       camera.position.x = camTarget.x;
-      camera.position.y = 8 - camTarget.y;
+      camera.position.y = 12 - camTarget.y;
       camera.lookAt(0, 0, 0);
 
       star.rotation.y += 0.003;
-      starMat.emissiveIntensity = 1.3 + Math.sin(frame * 2) * 0.3;
-      sunLight.intensity = 3.5 + Math.sin(frame * 3) * 0.6;
+      starMat.emissiveIntensity = 1.8 + Math.sin(frame * 2) * 0.4;
+      sunLight.intensity = 6.0 + Math.sin(frame * 3) * 1.0;
 
       // Hover detect for cursor change
       raycaster.setFromCamera(ndc, camera);
@@ -632,10 +656,10 @@ export default function SkillsUniverse() {
         planet.position.y += (0  - planet.position.y) * 0.05;
         planet.position.z += (tz - planet.position.z) * 0.05;
         planet.userData.planetMat.emissiveIntensity = isHov
-          ? 1.4 + Math.sin(frame * 5) * 0.2
-          : 0.6 + Math.sin(frame * 2 + idx) * 0.1;
-        planet.userData.atmMat.opacity = isHov ? 0.22 : 0.08;
-        planet.scale.setScalar(isHov ? 1.2 + Math.sin(frame * 4) * 0.03 : 1);
+          ? 1.8 + Math.sin(frame * 5) * 0.3
+          : 0.8 + Math.sin(frame * 2 + idx) * 0.15;
+        planet.userData.atmMat.opacity = isHov ? 0.28 : 0.10;
+        planet.scale.setScalar(isHov ? 1.15 + Math.sin(frame * 4) * 0.03 : 1);
         planet.rotation.y += 0.008;
       });
 
@@ -671,7 +695,7 @@ export default function SkillsUniverse() {
         </div>
       )}
 
-      <div style={{ position: 'relative', width: '100%', height: 'min(900px, 100vw)' }}>
+      <div style={{ position: 'relative', width: '100%', height: 'min(1000px, 90vw)' }}>
         <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
         <div className="skills-hint">CLICK A PLANET TO ENTER ITS LAB</div>
         <div className="skills-legend">

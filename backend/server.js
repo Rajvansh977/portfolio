@@ -8,6 +8,10 @@ import chatRoutes from './routes/chat.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy — fixes express-rate-limit ERR_ERL_UNEXPECTED_X_FORWARDED_FOR
+// '1' means trust the first proxy hop (Nginx, cloud load balancers, etc.)
+app.set('trust proxy', 1);
+
 // ── Middleware ──────────────────────────────────────────────
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
