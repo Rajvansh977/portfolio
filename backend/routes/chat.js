@@ -10,7 +10,7 @@ const limiter = rateLimit({
 });
 
 // ── System prompt — Rajvansh's AI persona ─────────────────────
-const SYSTEM_PROMPT = `You are Raj.AI — the personal AI assistant embedded in Rajvansh Rana's portfolio website. You speak in first person on behalf of Rajvansh when appropriate, or as his assistant.
+const SYSTEM_PROMPT = `You are CORE.AI — the personal AI assistant embedded in Rajvansh Rana's portfolio website. You speak in first person on behalf of Rajvansh when appropriate, or as his assistant.
 
 ABOUT RAJVANSH RANA:
 - Full-Stack Web Developer & B.Sc. IT student at GNDU, GGNIIVS, Punjab

@@ -21,7 +21,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm **Raj.AI** — Rajvansh's personal assistant. Ask me anything about his skills, projects, or availability. 🚀",
+      content: "Hi! I'm **CORE.AI** — Rajvansh's personal assistant. Ask me anything about his skills, projects, or availability. 🚀",
     },
   ]);
   const [input, setInput]       = useState('');
@@ -92,10 +92,10 @@ export default function ChatBot() {
       {/* ── Floating button ── */}
       <div className="cb-float">
         {unread > 0 && <span className="cb-badge">{unread}</span>}
-        <button className="cb-trigger" onClick={() => setOpen(o => !o)} title="Chat with Raj.AI">
+        <button className="cb-trigger" onClick={() => setOpen(o => !o)} title="Chat with CORE.AI">
           {open
             ? <ChevronDown size={22} />
-            : <img src="/bot.png" alt="Raj.AI" style={{ width: 32, height: 32 }} />
+            : <img src="/bot.png" alt="CORE.AI" style={{ width: 32, height: 32 }} />
           }
         </button>
       </div>
@@ -107,11 +107,11 @@ export default function ChatBot() {
         <div className="cb-header">
           <div className="cb-header-left">
             <div className="cb-avatar">
-              <img src="/bot.png" alt="Raj.AI" />
+              <img src="/bot.png" alt="CORE.AI" />
               <span className="cb-online" />
             </div>
             <div>
-              <div className="cb-name">Raj.AI</div>
+              <div className="cb-name">CORE.AI</div>
               <div className="cb-status">Rajvansh's Personal Assistant</div>
             </div>
           </div>
