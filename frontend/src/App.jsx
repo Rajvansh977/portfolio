@@ -8,7 +8,7 @@ import {
   Zap, ExternalLink, ArrowRight, Loader2,
   ChevronDown, Layers, Database, Wand2, Wrench, Bot,
   User, Code, BookOpen, Clock, CheckSquare, Infinity,
-  Volume2, VolumeX,
+  Volume2, VolumeX, X, Download,
 } from 'lucide-react';
 import ContactForm from './components/ContactForm.jsx';
 import HeroScene from './components/HeroScene.jsx';
@@ -308,14 +308,15 @@ const Counter = ({ end, label, suffix = '+' }) => {
 };
 
 // ── Profile Card ───────────────────────────────────────────────
-const ProfileCard = ({ avatarUrl, name, title, handle, status }) => {
-  const wrapRef  = useRef(null);
-  const cardRef  = useRef(null);
-  const imgRef   = useRef(null);
-  const detRef   = useRef(null);
-  const infoRef  = useRef(null);
-  const glowRef  = useRef(null);
-  const shineRef = useRef(null);
+const ProfileCard = ({ avatarUrl, cutoutUrl, name, title, handle, status }) => {
+  const wrapRef   = useRef(null);
+  const cardRef   = useRef(null);
+  const imgRef    = useRef(null);
+  const detRef    = useRef(null);
+  const infoRef   = useRef(null);
+  const glowRef   = useRef(null);
+  const shineRef  = useRef(null);
+  const cutoutRef = useRef(null);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -330,9 +331,16 @@ const ProfileCard = ({ avatarUrl, name, title, handle, status }) => {
       // Card tilt
       card.style.transform = `rotateX(${ry}deg) rotateY(${rx}deg)`;
 
-      // Image moves opposite direction — deeper in the scene
+      // Layer 1 — background image moves opposite (pushed back)
       if (imgRef.current)
         imgRef.current.style.transform = `translateX(${-rx * 1.8}px) translateY(${ry * 1.8}px) scale(1.08)`;
+
+      // Layer 3 — cutout pops FORWARD, moves with the tilt (same direction)
+      // Also inherits the card tilt so it feels glued to the card in 3D
+      if (cutoutRef.current) {
+        cutoutRef.current.style.transform =
+          `rotateX(${ry}deg) rotateY(${rx}deg) translateX(${rx * 3.5}px) translateY(${-ry * 3.5}px) translateZ(60px)`;
+      }
 
       // Name/title floats forward
       if (detRef.current)
@@ -719,11 +727,222 @@ const SiteFlash = () => {
   );
 };
 
+// ── Resume Modal ───────────────────────────────────────────────
+const ResumeModal = ({ onClose }) => {
+  const isMobile = window.innerWidth <= 768;
+
+  // Lock body scroll while open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  return (
+    <div
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 99997,
+        background: 'rgba(0,0,0,0.88)',
+        backdropFilter: 'blur(14px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: isMobile ? '0' : '20px',
+        animation: 'fadeIn 0.22s ease',
+      }}
+    >
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: isMobile ? '100%' : '860px',
+        height: isMobile ? '100%' : '90vh',
+        background: 'var(--bg-card2)',
+        border: isMobile ? 'none' : '1px solid rgba(244,208,63,0.25)',
+        borderRadius: isMobile ? '0' : '16px',
+        overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
+        boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 0 40px rgba(244,208,63,0.06)',
+        animation: 'modalSlideUp 0.32s cubic-bezier(0.16,1,0.3,1)',
+      }}>
+
+        {/* ── Header bar ── */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '14px 16px',
+          borderBottom: '1px solid rgba(244,208,63,0.15)',
+          background: 'rgba(244,208,63,0.05)',
+          flexShrink: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+            <FileText size={15} style={{ color: 'var(--gold)', flexShrink: 0 }} />
+            <span style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: isMobile ? '0.65rem' : '0.75rem',
+              fontWeight: 700, color: 'var(--gold)',
+              letterSpacing: '2px', textTransform: 'uppercase',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              Rajvansh_Rana_Resume.pdf
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+            <a
+              href="/resume-rajvansh.pdf"
+              download="Rajvansh_Rana_Resume.pdf"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                padding: isMobile ? '8px 14px' : '8px 18px',
+                background: 'var(--gold)', color: 'var(--bg)',
+                fontFamily: 'var(--font-heading)',
+                fontSize: isMobile ? '0.65rem' : '0.72rem',
+                fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px',
+                textDecoration: 'none', borderRadius: '8px',
+              }}
+            >
+              <Download size={13} />
+              {isMobile ? 'SAVE' : 'DOWNLOAD'}
+            </a>
+            {/* Open in new tab — useful on mobile where iframe is hidden */}
+            {isMobile && (
+              <a
+                href="/resume-rajvansh.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  padding: '8px 14px',
+                  background: 'transparent',
+                  border: '1px solid rgba(244,208,63,0.4)',
+                  color: 'var(--gold)',
+                  fontFamily: 'var(--font-heading)', fontSize: '0.65rem',
+                  fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px',
+                  textDecoration: 'none', borderRadius: '8px',
+                }}
+              >
+                <ExternalLink size={13} /> OPEN
+              </a>
+            )}
+            <button
+              onClick={onClose}
+              style={{
+                width: 34, height: 34, borderRadius: '8px',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: 'rgba(232,244,248,0.7)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* ── Desktop: iframe PDF viewer ── */}
+        {!isMobile && (
+          <iframe
+            src="/resume-rajvansh.pdf#toolbar=0&navpanes=0&scrollbar=1"
+            title="Resume Preview"
+            style={{ flex: 1, width: '100%', border: 'none', background: '#fff' }}
+          />
+        )}
+
+        {/* ── Mobile: styled action card instead of broken iframe ── */}
+        {isMobile && (
+          <div style={{
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            padding: '40px 32px', gap: '32px',
+          }}>
+            {/* Big PDF icon */}
+            <div style={{
+              width: 100, height: 100, borderRadius: '24px',
+              background: 'rgba(244,208,63,0.08)',
+              border: '1px solid rgba(244,208,63,0.25)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 40px rgba(244,208,63,0.1)',
+            }}>
+              <FileText size={48} style={{ color: 'var(--gold)' }} />
+            </div>
+
+            {/* Info text */}
+            <div style={{ textAlign: 'center' }}>
+              <p style={{
+                fontFamily: 'var(--font-heading)', fontSize: '1.1rem',
+                fontWeight: 900, color: '#fff', letterSpacing: '3px',
+                textTransform: 'uppercase', marginBottom: '10px',
+              }}>
+                Rajvansh Rana
+              </p>
+              <p style={{
+                fontFamily: 'var(--font-heading)', fontSize: '0.7rem',
+                color: 'var(--gold)', letterSpacing: '3px',
+                textTransform: 'uppercase', marginBottom: '16px',
+              }}>
+                Full Stack Web Developer
+              </p>
+              <p style={{
+                fontFamily: 'var(--font-body)', fontSize: '0.85rem',
+                color: 'rgba(232,244,248,0.5)', lineHeight: 1.6,
+              }}>
+                PDF preview isn't supported in mobile browsers.{'\n'}
+                Use the buttons below to view or save the resume.
+              </p>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '280px' }}>
+              <a
+                href="/resume-rajvansh.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  padding: '16px', borderRadius: '12px',
+                  background: 'var(--gold)', color: 'var(--bg)',
+                  fontFamily: 'var(--font-heading)', fontSize: '0.85rem',
+                  fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px',
+                  textDecoration: 'none',
+                }}
+              >
+                <ExternalLink size={16} /> VIEW RESUME
+              </a>
+              <a
+                href="/resume-rajvansh.pdf"
+                download="Rajvansh_Rana_Resume.pdf"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  padding: '16px', borderRadius: '12px',
+                  background: 'transparent',
+                  border: '1px solid rgba(244,208,63,0.4)',
+                  color: 'var(--gold)',
+                  fontFamily: 'var(--font-heading)', fontSize: '0.85rem',
+                  fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px',
+                  textDecoration: 'none',
+                }}
+              >
+                <Download size={16} /> DOWNLOAD PDF
+              </a>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+};
+
 // ── Main App ───────────────────────────────────────────────────
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [loaded,  setLoaded]  = useState(false);
   const [muted, setMuted] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
+
+  // Close resume modal on Escape
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') setResumeOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const audioRef = useRef(null);
 
   // Create the bg audio element once, up front, so Loader can start it
@@ -775,6 +994,29 @@ export default function App() {
       setMuted(true);
     }
   };
+
+  // Pause music when user leaves the tab, resume when they come back
+  // Works in every browser that supports the Page Visibility API (all modern ones)
+  useEffect(() => {
+    if (!loaded) return;
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        // Tab is hidden — pause silently
+        audio.pause();
+      } else {
+        // Tab is visible again — only resume if the user hasn't manually muted
+        if (!muted) {
+          audio.play().catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [loaded, muted]);
 
   // Active nav highlight on scroll
   useEffect(() => {
@@ -893,14 +1135,13 @@ export default function App() {
               VIEW PROJECTS
             </button>
             <a href="#contact" className="cta-button cta-outline" onClick={e => { e.preventDefault(); scrollTo('contact'); }}>HIRE ME</a>
-            <a
-              href="/resume.pdf"
-              download="Rajvansh_Rana_Resume.pdf"
+            <button
               className="cta-button cta-outline"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              onClick={() => setResumeOpen(true)}
             >
               <FileText size={15} /> RESUME
-            </a>
+            </button>
           </div>
         </div>
         <div className="hero-scroll-indicator">
@@ -955,7 +1196,7 @@ export default function App() {
 
             {/* COL 3 — Profile Card */}
             <div className="sp-col sp-col-right reveal-item">
-              <ProfileCard avatarUrl="/profile.jpg" name="Rajvansh Rana" title="Web Developer" handle="rajvansh911" status="Available for Work" />
+              <ProfileCard avatarUrl="/ME.png" cutoutUrl="/ME.png" name="Rajvansh Rana" title="Web Developer" handle="rajvansh911" status="Available for Work" />
             </div>
 
           </div>
@@ -1105,6 +1346,46 @@ export default function App() {
       <section id="skills" className="section">
         <div className="container">
           <h2 className="section-title">Core Systems</h2>
+
+          {/* ── Instruction bar ── */}
+          <div style={{
+            display: 'flex', justifyContent: 'center', gap: '12px',
+            flexWrap: 'wrap', marginBottom: '32px',
+          }}>
+            {[
+              { step: '01', icon: '🪐', action: 'HOVER A PLANET',   desc: 'See it glow & pulse' },
+              { step: '02', icon: '🖱️', action: 'CLICK TO ENTER',   desc: 'Dive into its skill lab' },
+              { step: '03', icon: '📦', action: 'EXPLORE PACKAGES', desc: 'Click any card for details' },
+            ].map(({ step, icon, action, desc }) => (
+              <div key={step} style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '12px 20px',
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(244,208,63,0.12)',
+                borderRadius: '12px',
+                minWidth: '220px', flex: '1', maxWidth: '280px',
+              }}>
+                <div style={{
+                  fontFamily: 'var(--font-heading)', fontSize: '0.55rem',
+                  color: 'var(--gold)', letterSpacing: '2px', opacity: 0.5,
+                  minWidth: '20px',
+                }}>{step}</div>
+                <div style={{ fontSize: '1.3rem', lineHeight: 1 }}>{icon}</div>
+                <div>
+                  <div style={{
+                    fontFamily: 'var(--font-heading)', fontSize: '0.68rem',
+                    fontWeight: 700, color: 'var(--gold)', letterSpacing: '2px',
+                    textTransform: 'uppercase', marginBottom: '3px',
+                  }}>{action}</div>
+                  <div style={{
+                    fontFamily: 'var(--font-body)', fontSize: '0.75rem',
+                    color: 'rgba(232,244,248,0.45)',
+                  }}>{desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <SkillsUniverse />
         </div>
       </section>
@@ -1146,6 +1427,11 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* ── RESUME PREVIEW MODAL ── */}
+      {resumeOpen && (
+        <ResumeModal onClose={() => setResumeOpen(false)} />
+      )}
 
     </div>
   );

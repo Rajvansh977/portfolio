@@ -14,7 +14,11 @@ app.set('trust proxy', 1);
 
 // ── Middleware ──────────────────────────────────────────────
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: [
+    process.env.CLIENT_URL,
+    'http://localhost:5173',
+    'https://portfolio-dun-two-72h4dk70r6.vercel.app',
+  ],
   methods: ['GET', 'POST'],
 }));
 app.use(express.json());

@@ -32,6 +32,8 @@ function preload() {
   for (let i = 1; i <= 10; i++) {
     const a = new Audio(`/voices/${i}.mp3`);
     a.preload = 'auto';
+    // Prime the audio element so the browser starts buffering immediately
+    a.load();
     pool[i] = a;
   }
 }
@@ -53,54 +55,70 @@ function runScript(onLine, onDone) {
 
     const entry = SCRIPT[index];
     const audio = pool[entry.voice];
-    if (!audio) { playEntry(index + 1); return; }
+    if (!audio) { onLine(entry.text); setTimeout(() => playEntry(index + 1), 2000); return; }
 
+    // Reset and show caption immediately — don't wait for 'playing'
     audio.pause();
     audio.currentTime = 0;
     clearSubs();
-
-    const onPlaying = () => {
-      if (cancelled) return;
-      onLine(entry.text);
-      if (entry.sub && entry.sub.length > 1) {
-        const waitForDuration = () => {
-          const dur = audio.duration;
-          if (!isFinite(dur) || dur <= 0) { requestAnimationFrame(waitForDuration); return; }
-          const slice = (dur / entry.sub.length) * 1000;
-          entry.sub.forEach((subText, i) => {
-            if (i === 0) return;
-            const t = setTimeout(() => { if (!cancelled) onLine(subText); }, slice * i);
-            subTimers.push(t);
-          });
-        };
-        waitForDuration();
-      }
-    };
+    onLine(entry.text);
 
     const onEnded = () => {
       if (cancelled) return;
       clearSubs();
-      setTimeout(() => playEntry(index + 1), 600);
+      setTimeout(() => playEntry(index + 1), 400);
     };
 
     const onError = () => {
       if (cancelled) return;
       clearSubs();
-      setTimeout(() => playEntry(index + 1), 500);
+      setTimeout(() => playEntry(index + 1), 400);
     };
 
-    audio.addEventListener('playing', onPlaying, { once: true });
-    audio.addEventListener('ended',   onEnded,   { once: true });
-    audio.addEventListener('error',   onError,   { once: true });
+    // Schedule sub-line captions once duration is known
+    const scheduleSubLines = () => {
+      if (!entry.sub || entry.sub.length <= 1) return;
+      const dur = audio.duration;
+      if (!isFinite(dur) || dur <= 0) {
+        // Duration not ready yet — wait a tick and retry
+        setTimeout(scheduleSubLines, 50);
+        return;
+      }
+      const slice = (dur / entry.sub.length) * 1000;
+      entry.sub.forEach((subText, i) => {
+        if (i === 0) return; // first line already shown above
+        const t = setTimeout(() => { if (!cancelled) onLine(subText); }, slice * i);
+        subTimers.push(t);
+      });
+    };
 
-    audio.play().catch(() => {
-      audio.removeEventListener('playing', onPlaying);
-      audio.removeEventListener('ended',   onEnded);
-      audio.removeEventListener('error',   onError);
-      clearSubs();
-      onLine(entry.text);
-      setTimeout(() => playEntry(index + 1), 2500);
-    });
+    audio.addEventListener('ended', onEnded, { once: true });
+    audio.addEventListener('error', onError, { once: true });
+
+    const tryPlay = () => {
+      audio.play().then(() => {
+        scheduleSubLines();
+      }).catch(() => {
+        // Playback failed (e.g. file missing) — still advance
+        audio.removeEventListener('ended', onEnded);
+        audio.removeEventListener('error', onError);
+        clearSubs();
+        setTimeout(() => playEntry(index + 1), 2000);
+      });
+    };
+
+    // If audio isn't buffered enough, wait for it before playing
+    if (audio.readyState >= 3) {
+      tryPlay();
+    } else {
+      const onReady = () => { audio.removeEventListener('canplaythrough', onReady); tryPlay(); };
+      audio.addEventListener('canplaythrough', onReady, { once: true });
+      // Fallback: if canplaythrough never fires within 600ms, play anyway
+      setTimeout(() => {
+        audio.removeEventListener('canplaythrough', onReady);
+        tryPlay();
+      }, 600);
+    }
   };
 
   playEntry(0);
@@ -129,6 +147,8 @@ export default function Loader({ onDone, bgAudioRef }) {
   const [caption,      setCaption]      = useState('');
   const [captionVis,   setCaptionVis]   = useState(false);
   const [started,      setStarted]      = useState(false);
+  const [cursorPos,    setCursorPos]    = useState({ x: -999, y: -999 });
+  const [cursorVisible, setCursorVisible] = useState(false);
 
   const finishRef       = useRef(null);
   const doneRef         = useRef(false);
@@ -170,7 +190,6 @@ export default function Loader({ onDone, bgAudioRef }) {
       setFlashOpacity(1);
       setTimeout(() => {
         stopAll();
-        document.body.style.cursor = '';
         onDone();
       }, 800);
       return;
@@ -230,7 +249,6 @@ export default function Loader({ onDone, bgAudioRef }) {
           if (mount && mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
           renderer.dispose();
           stopAll();
-          document.body.style.cursor = '';
           // Flash fades out as site reveals (controlled by App's own fade-in)
           onDone();
         }, 120);
@@ -244,8 +262,14 @@ export default function Loader({ onDone, bgAudioRef }) {
 
   // ── Three.js setup — runs on mount ────────────────────────────
   useEffect(() => {
-    document.body.style.cursor = 'none';
+    // Don't hide the system cursor — we render our own gold crosshair instead
     preload();
+
+    const onMouseMove = (e) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      setCursorVisible(true);
+    };
+    window.addEventListener('mousemove', onMouseMove);
 
     const mount = mountRef.current;
     if (!mount) return;
@@ -345,7 +369,7 @@ export default function Loader({ onDone, bgAudioRef }) {
       renderer.dispose();
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
       window.removeEventListener('resize', onResize);
-      document.body.style.cursor = '';
+      window.removeEventListener('mousemove', onMouseMove);
     };
   }, []);
 
@@ -382,13 +406,45 @@ export default function Loader({ onDone, bgAudioRef }) {
     <div style={{
       position: 'fixed', inset: 0, zIndex: 999999,
       background: '#000',
-      cursor: 'none',
     }}>
 
       {/* 3D canvas */}
       <div ref={mountRef} style={{
         position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0,
       }} />
+
+      {/* Custom gold crosshair cursor */}
+      {cursorVisible && (
+        <div style={{
+          position: 'fixed',
+          left: cursorPos.x,
+          top: cursorPos.y,
+          width: 0,
+          height: 0,
+          pointerEvents: 'none',
+          zIndex: 999998,
+          transform: 'translate(-50%, -50%)',
+        }}>
+          {/* Center dot */}
+          <div style={{
+            position: 'absolute',
+            width: 6, height: 6,
+            borderRadius: '50%',
+            background: '#f4d03f',
+            boxShadow: '0 0 10px #f4d03f',
+            transform: 'translate(-50%, -50%)',
+          }} />
+          {/* Corner brackets */}
+          {[
+            { top: -14, left: -14, borderTop: '2px solid #f4d03f', borderLeft:   '2px solid #f4d03f', width: 10, height: 10 },
+            { top: -14, left:   4, borderTop: '2px solid #f4d03f', borderRight:  '2px solid #f4d03f', width: 10, height: 10 },
+            { top:   4, left:   4, borderBottom: '2px solid #f4d03f', borderRight: '2px solid #f4d03f', width: 10, height: 10 },
+            { top:   4, left: -14, borderBottom: '2px solid #f4d03f', borderLeft: '2px solid #f4d03f', width: 10, height: 10 },
+          ].map((s, i) => (
+            <div key={i} style={{ position: 'absolute', ...s }} />
+          ))}
+        </div>
+      )}
 
       {/* White flash overlay — fills screen during wormhole exit */}
       <div style={{

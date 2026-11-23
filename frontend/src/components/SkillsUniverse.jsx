@@ -697,7 +697,7 @@ export default function SkillsUniverse() {
 
       <div style={{ position: 'relative', width: '100%', height: 'min(1000px, 90vw)' }}>
         <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
-        <div className="skills-hint">CLICK A PLANET TO ENTER ITS LAB</div>
+        <div className="skills-hint">🖱️ &nbsp;HOVER TO GLOW &nbsp;·&nbsp; CLICK TO EXPLORE</div>
         <div className="skills-legend">
           {SKILL_DATA.map((cat, i) => (
             <div key={i} className="skills-legend-item">

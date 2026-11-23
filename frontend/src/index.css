@@ -470,6 +470,7 @@ body {
 /* ── PROFILE CARD ─────────────────────────────────────── */
 .pc-card-wrapper {
   perspective: 900px;
+  transform-style: preserve-3d;   /* ← passes 3D context to children */
   position: relative;
   touch-action: none;
   /* outer glow */
@@ -498,9 +499,9 @@ body {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(244,208,63,0.25);
-  transform-style: preserve-3d;
+  transform-style: preserve-3d;   /* ← 3D on the card itself too */
   will-change: transform;
-  transition: box-shadow 0.4s ease;
+  transition: box-shadow 0.4s ease; /* only box-shadow transitions, NOT transform */
   background: #0a1628;
   box-shadow:
     0 25px 60px rgba(0,0,0,0.7),
@@ -983,24 +984,34 @@ body {
 
 /* ── SKILLS UNIVERSE ──────────────────────────────────── */
 .skills-hint {
-  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
-  font-family: var(--font-heading); font-size: 0.6rem; font-weight: 700;
-  color: rgba(244,208,63,0.4); letter-spacing: 3px; text-transform: uppercase;
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-heading); font-size: 0.72rem; font-weight: 700;
+  color: rgba(244,208,63,0.75); letter-spacing: 3px; text-transform: uppercase;
   white-space: nowrap; pointer-events: none;
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(244,208,63,0.2);
+  border-radius: 20px;
+  padding: 8px 20px;
+  backdrop-filter: blur(8px);
   animation: pulse-hint 3s ease-in-out infinite;
 }
-@keyframes pulse-hint { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+@keyframes pulse-hint { 0%,100%{opacity:0.6} 50%{opacity:1} }
 
 .skills-legend {
-  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
   pointer-events: none;
+  background: rgba(10,22,40,0.65);
+  border: 1px solid rgba(244,208,63,0.1);
+  border-radius: 20px;
+  padding: 8px 20px;
+  backdrop-filter: blur(8px);
 }
 .skills-legend-item { display: flex; align-items: center; gap: 6px; }
-.skills-legend-dot  { width: 8px; height: 8px; border-radius: 50%; }
+.skills-legend-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .skills-legend-label {
-  font-family: var(--font-heading); font-size: 0.58rem; font-weight: 700;
-  color: rgba(232,244,248,0.45); letter-spacing: 1.5px; text-transform: uppercase;
+  font-family: var(--font-heading); font-size: 0.62rem; font-weight: 700;
+  color: rgba(232,244,248,0.65); letter-spacing: 1.5px; text-transform: uppercase;
 }
 
 /* ── TELEPORT FLASH ───────────────────────────────────── */
